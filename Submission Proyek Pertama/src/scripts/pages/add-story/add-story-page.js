@@ -42,13 +42,27 @@ export default class AddStoryPage {
       cameraStream.srcObject = stream;
       cameraStream.style.display = 'block';
       photoCanvas.style.display = 'block';
-
-      captureButton.addEventListener('click', () => {
+      // Set canvas size to video size for correct capture
+      cameraStream.addEventListener('loadedmetadata', () => {
+        photoCanvas.width = cameraStream.videoWidth;
+        photoCanvas.height = cameraStream.videoHeight;
+      });
+      // Only allow one capture per stream
+      const captureHandler = () => {
         const context = photoCanvas.getContext('2d');
         context.drawImage(cameraStream, 0, 0, photoCanvas.width, photoCanvas.height);
         cameraStream.srcObject.getTracks().forEach(track => track.stop());
         cameraStream.style.display = 'none';
-      });
+        captureButton.removeEventListener('click', captureHandler);
+        // Convert canvas to blob and set as file input
+        photoCanvas.toBlob(blob => {
+          const file = new File([blob], 'captured-photo.png', { type: 'image/png' });
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(file);
+          document.getElementById('photo').files = dataTransfer.files;
+        }, 'image/png');
+      };
+      captureButton.addEventListener('click', captureHandler);
     });
 
     form.addEventListener('submit', async (event) => {
