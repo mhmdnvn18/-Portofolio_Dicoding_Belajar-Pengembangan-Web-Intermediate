@@ -1,48 +1,31 @@
 // CSS imports
 import '../styles/styles.css';
-import '../styles/responsives.css';
-import 'tiny-slider/dist/tiny-slider.css';
-import 'leaflet/dist/leaflet.css';
 
 import App from './pages/app';
-import Camera from './utils/camera';
-
-class RuangKisahAPI {
-  static async login(credentials) {
-    try {
-      const response = await fetch('YOUR_API_ENDPOINT/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Login Error:', error);
-      throw error;
-    }
-  }
-  
- 
-}
-
-export default RuangKisahAPI;
 
 document.addEventListener('DOMContentLoaded', async () => {
   const app = new App({
-    content: document.getElementById('main-content'),
-    drawerButton: document.getElementById('drawer-button'),
-    drawerNavigation: document.getElementById('navigation-drawer'),
-    skipLinkButton: document.getElementById('skip-link'),
+    content: document.querySelector('#main-content'),
+    drawerButton: document.querySelector('#drawer-button'),
+    navigationDrawer: document.querySelector('#navigation-drawer'),
   });
   await app.renderPage();
 
   window.addEventListener('hashchange', async () => {
     await app.renderPage();
+  });
 
-    
-    Camera.stopAllStreams();
+  window.addEventListener('beforeunload', () => {
+    document.body.classList.add('fade-out');
+  });
+
+  document.querySelector('.navigation-overlay').addEventListener('click', () => {
+    document.querySelector('.navigation-drawer').classList.remove('open');
+    document.querySelector('.navigation-overlay').classList.remove('active');
+  });
+
+  document.getElementById('drawer-button').addEventListener('click', () => {
+    document.querySelector('.navigation-drawer').classList.add('open');
+    document.querySelector('.navigation-overlay').classList.add('active');
   });
 });

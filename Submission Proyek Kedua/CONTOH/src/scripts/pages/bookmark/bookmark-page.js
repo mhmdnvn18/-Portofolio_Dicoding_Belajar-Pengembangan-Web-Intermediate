@@ -1,11 +1,13 @@
-import { BookmarkStorage } from '../../templates';
+import BookmarkStorage from '../../data/bookmark-storage';
 import { generateReportItemTemplate, generateReportsListEmptyTemplate } from '../../templates';
 
 export default class BookmarkPage {
   async render() {
     return `
       <section class="content">
-        <div id="bookmarks-container" class="stories-list"></div>
+      
+        <div id="bookmarks-container" class="stories-list">
+        </div>
       </section>
     `;
   }
@@ -15,7 +17,7 @@ export default class BookmarkPage {
     const bookmarks = BookmarkStorage.getAllBookmarks();
 
     if (!bookmarks.length) {
-      bookmarksContainer.innerHTML = generateReportsListEmptyTemplate('Belum ada cerita yang disimpan.');
+      
       return;
     }
 
@@ -45,8 +47,9 @@ export default class BookmarkPage {
         const storyId = item.dataset.storyid;
         BookmarkStorage.removeBookmark(storyId);
         item.remove();
+        
         if (!BookmarkStorage.getAllBookmarks().length) {
-          bookmarksContainer.innerHTML = generateReportsListEmptyTemplate('Belum ada cerita yang disimpan.');
+        
         }
       });
 

@@ -329,7 +329,7 @@ export function generateRemoveReportButtonTemplate() {
     <button 
       id="story-detail-remove" 
       class="btn btn-action btn-danger"
-      style="position: relative; z-index: 100;
+      style="position: relative; z-index: 100;"
     >
       <i class="fas fa-trash"></i> Hapus Cerita
     </button>
@@ -363,4 +363,4 @@ const BookmarkStorage = {
   },
 };
 
-export { BookmarkStorage };
+export default BookmarkStorage;
