@@ -9,7 +9,7 @@ export default class LoginPage {
     return `
       <section class="login-container">
         <article class="login-form-container">
-          <h1 class="login__title">Masuk akun</h1>
+          <h1 class="login__title">Masuk akun warga</h1>
 
           <form id="login-form" class="login-form">
             <div class="form-control">

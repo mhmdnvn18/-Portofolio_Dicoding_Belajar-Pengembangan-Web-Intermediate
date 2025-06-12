@@ -6,13 +6,13 @@
 }
 
 :root {
-  --primary-color: #1e6d3f;
-  --primary-text-color: #2bc4c4;
-  --primary-hover-color: #00a4b6;
-  --primary-shadow-color: #d9770699;
+  --primary-color: #b71c1c; /* Merah tua */
+  --primary-text-color: #ffffff;
+  --primary-hover-color: #d32f2f; /* Merah terang */
+  --primary-shadow-color: #ffb30066; /* Oranye kekuningan transparan untuk shadow */
 
-  --secondary-color: #6c757d;
-  --secondary-text-color: #1aa5b5;
+  --secondary-color: #ffb300; /* Kuning-oranye */
+  --secondary-text-color: #b71c1c;
 }
 
 @keyframes full-slide-from-right {
@@ -166,13 +166,13 @@ select {
 }
 
 .btn.btn-transparent {
-  border: 1px solid #1177aa;
+  border: 1px solid var(--secondary-color);
   background-color: #ffffff;
   color: #09090b !important;
 }
 
 .btn.btn-transparent:hover {
-  background-color: #d4d4d4;
+  background-color: #f5f5f5;
 }
 
 .btn.btn-transparent:focus-visible {
@@ -266,6 +266,7 @@ header {
 }
 
 .brand-name__link {
+  color: var(--primary-color);
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -273,12 +274,11 @@ header {
   font-size: 1.125rem;
   font-weight: bold;
   text-decoration: none;
-  color: #1e6d3f;
 }
 
 .brand-name__link__image {
   width: 35px;
-  filter: invert(27%) sepia(88%) saturate(431%) hue-rotate(118deg) brightness(93%) contrast(89%);
+  filter: invert(12%) sepia(97%) saturate(7492%) hue-rotate(356deg) brightness(90%) contrast(110%);
 }
 
 .navigation-drawer {
@@ -1291,22 +1291,22 @@ footer {
 
 /* Bookmark Styles */
 .btn-remove {
-  background-color: #dc3545;
+  background-color: #c62828; /* Merah lebih gelap */
   color: white;
   margin-top: 1rem;
 }
 
 .btn-remove:hover {
-  background-color: #c82333;
+  background-color: #8e0000;
 }
 
 .saved {
-  background-color: #28a745;
+  background-color: #43a047;
   color: white;
 }
 
 .saved:hover {
-  background-color: #218838;
+  background-color: #2e7d32;
 }
 
 /* Map Control Styles */

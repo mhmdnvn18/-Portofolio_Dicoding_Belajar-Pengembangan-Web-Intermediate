@@ -9,11 +9,11 @@ export default class RegisterPage {
     return `
       <section class="register-container">
         <div class="register-form-container">
-          <h1 class="register__title">Daftar akun</h1>
+          <h1 class="register__title">Daftar akun warga</h1>
 
           <form id="register-form" class="register-form">
             <div class="form-control">
-              <label for="name-input" class="register-form__name-title">Nama lengkap</label>
+              <label for="name-input" class="register-form__name-title">Nama warga</label>
               <div class="register-form__title-container">
                 <input id="name-input" type="text" name="name" placeholder="Masukkan nama lengkap Anda" required>
               </div>

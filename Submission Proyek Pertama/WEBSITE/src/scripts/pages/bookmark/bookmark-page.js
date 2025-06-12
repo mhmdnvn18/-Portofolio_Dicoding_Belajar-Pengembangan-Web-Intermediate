@@ -5,7 +5,6 @@ export default class BookmarkPage {
   async render() {
     return `
       <section class="content">
-      
         <div id="bookmarks-container" class="stories-list">
         </div>
       </section>
@@ -17,7 +16,7 @@ export default class BookmarkPage {
     const bookmarks = BookmarkStorage.getAllBookmarks();
 
     if (!bookmarks.length) {
-      
+      bookmarksContainer.innerHTML = generateReportsListEmptyTemplate('Belum ada laporan yang disimpan.');
       return;
     }
 
@@ -41,15 +40,15 @@ export default class BookmarkPage {
       const removeBtn = document.createElement('button');
       removeBtn.className = 'btn btn-remove';
       removeBtn.innerHTML = '<i class="fas fa-trash"></i> Hapus';
-      
+
       removeBtn.addEventListener('click', (e) => {
         e.preventDefault();
         const storyId = item.dataset.storyid;
         BookmarkStorage.removeBookmark(storyId);
         item.remove();
-        
+
         if (!BookmarkStorage.getAllBookmarks().length) {
-        
+          bookmarksContainer.innerHTML = generateReportsListEmptyTemplate('Belum ada laporan yang disimpan.');
         }
       });
 

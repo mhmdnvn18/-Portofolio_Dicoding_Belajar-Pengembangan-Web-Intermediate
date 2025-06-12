@@ -19,12 +19,12 @@ export default class StoryDetailPresenter {
   }
 
   /**
-   * Mengambil detail cerita dari API dan memberitahu view untuk menampilkannya.
+   * Mengambil detail laporan dari API dan memberitahu view untuk menampilkannya.
    */
   async fetchStoryDetail() {
     if (!this.#storyId) {
       if (typeof this.#view.displayError === 'function') {
-        this.#view.displayError('Tidak dapat memuat cerita karena ID tidak ditemukan.');
+        this.#view.displayError('Tidak dapat memuat laporan karena ID tidak ditemukan.');
       }
       return;
     }
@@ -37,7 +37,7 @@ export default class StoryDetailPresenter {
     }
 
     try {
-      // 2. Panggil fungsi API untuk mendapatkan detail cerita berdasarkan ID.
+      // 2. Panggil fungsi API untuk mendapatkan detail laporan berdasarkan ID.
       // Pastikan 'getStoryById' adalah nama fungsi yang benar di file api.js Anda
       // yang melakukan GET /stories/:id dan menyertakan token jika perlu.
       const response = await this.#model.getStoryById(this.#storyId);
@@ -49,10 +49,10 @@ export default class StoryDetailPresenter {
       }
 
       if (!response.ok) {
-        // Jika API mengembalikan status error (misalnya, cerita tidak ditemukan, masalah server)
+        // Jika API mengembalikan status error (misalnya, laporan tidak ditemukan, masalah server)
         console.error('StoryDetailPresenter: Failed to fetch story detail (API response not OK):', response);
         if (typeof this.#view.displayError === 'function') {
-          this.#view.displayError(response.message || 'Gagal memuat detail cerita.');
+          this.#view.displayError(response.message || 'Gagal memuat detail laporan.');
         }
         return; // Hentikan eksekusi lebih lanjut jika gagal
       }
@@ -68,14 +68,14 @@ export default class StoryDetailPresenter {
         // Jika respons.ok true tapi tidak ada objek 'story' (seharusnya tidak terjadi untuk API yang benar)
         console.error('StoryDetailPresenter: Story data missing in successful API response:', response);
         if (typeof this.#view.displayError === 'function') {
-          this.#view.displayError('Data detail cerita tidak ditemukan dalam respons server.');
+          this.#view.displayError('Data detail laporan tidak ditemukan dalam respons server.');
         }
       }
 
     } catch (error) { // Menangkap error jaringan atau error JavaScript lainnya
       console.error('StoryDetailPresenter: Unexpected error fetching story detail:', error);
       if (typeof this.#view.displayError === 'function') {
-        this.#view.displayError(error.message || 'Terjadi kesalahan saat mengambil detail cerita.');
+        this.#view.displayError(error.message || 'Terjadi kesalahan saat mengambil detail laporan.');
       }
     } finally {
       // 3. Selalu sembunyikan loading di View, apapun hasilnya

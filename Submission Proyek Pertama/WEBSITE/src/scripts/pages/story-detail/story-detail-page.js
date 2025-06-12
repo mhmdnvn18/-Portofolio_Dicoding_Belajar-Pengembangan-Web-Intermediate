@@ -25,7 +25,7 @@ export default class StoryDetailPage {
       <section class="container story-detail-page-container" aria-live="polite">
         <div id="story-detail-loading-container" class="loading-container-absolute"></div>
         <article id="story-detail-content" class="story-detail-content">
-          <h2>Memuat Detail Cerita...</h2>
+          <h2>Memuat Detail Laporan...</h2>
         </article>
       </section>
     `;

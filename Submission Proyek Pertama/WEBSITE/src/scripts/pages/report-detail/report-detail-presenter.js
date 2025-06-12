@@ -28,7 +28,7 @@ export default class ReportDetailPresenter {
 
       if (!response.ok) {
         console.error('showReportDetailAndMap: response:', response);
-        this.#view.populateReportDetailError(response.message);
+        this.#view.populateReportDetailError(response.message || 'Gagal memuat detail laporan.');
         return;
       }
 
@@ -39,7 +39,7 @@ export default class ReportDetailPresenter {
       this.#view.populateReportDetailAndInitialMap(response.message, response.data);
     } catch (error) {
       console.error('showReportDetailAndMap: error:', error);
-      this.#view.populateReportDetailError(error.message);
+      this.#view.populateReportDetailError(error.message || 'Terjadi kesalahan saat mengambil detail laporan.');
     } finally {
       this.#view.hideReportDetailLoading();
     }

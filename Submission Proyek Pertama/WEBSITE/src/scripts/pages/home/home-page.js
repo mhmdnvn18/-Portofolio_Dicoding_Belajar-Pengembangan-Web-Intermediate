@@ -24,7 +24,7 @@ export default class HomePage {
       </section>
 
       <section class="container">
-        <h1 class="section-title">Daftar Cerita</h1>
+        <h1 class="section-title">Daftar Laporan</h1>
 
         <div class="stories-list__container">
           <div id="stories-list"></div> 
