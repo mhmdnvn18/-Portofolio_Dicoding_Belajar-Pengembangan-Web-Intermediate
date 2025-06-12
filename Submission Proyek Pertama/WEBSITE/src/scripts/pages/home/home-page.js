@@ -1,97 +1,177 @@
-import { getAllStories } from '../../data/api';
-import L from 'leaflet';
+import {
+  generateLoaderAbsoluteTemplate,
+  // Nama-nama template dikembalikan sesuai dengan yang ada di file templates.js Anda
+  generateReportItemTemplate,
+  generateReportsListEmptyTemplate,
+  generateReportsListErrorTemplate,
+} from '../../templates'; // Pastikan path ini benar
+import HomePresenter from './home-presenter';
+import Map from '../../utils/map'; // Utilitas Peta Anda
+import * as StoryAPI from '../../data/api'; // Menggunakan alias yang lebih sesuai
 
 export default class HomePage {
-  async render() {
-    return `
-      <section class="container mt-5" role="region" aria-labelledby="home-page-title">
-        <h1 id="home-page-title" class="text-center"><i class="fas fa-home"></i> Selamat Datang di PlantCare</h1>
-        <p class="mt-3 text-center">PlantCare adalah aplikasi andalan Anda untuk mengelola tanaman. Melacak pertumbuhan tanaman, jadwal penyiraman, dan kesehatan keseluruhan tanaman Anda dengan mudah. Antarmuka yang ramah pengguna dan fitur-fitur canggih kami membuat perawatan tanaman menjadi sederhana dan menyenangkan.</p>
-        
-        <div class="row mt-5">
-          <div class="col-md-6">
-            <h2 class="mt-4"><i class="fas fa-info-circle"></i> Tentang Kami</h2>
-            <p>PlantCare dikembangkan oleh tim yang terdiri dari penggemar tanaman dan pengembang perangkat lunak yang berdedikasi. Kami berkomitmen untuk memberikan pengalaman terbaik bagi pengguna kami dan terus meningkatkan platform kami.</p>
-          </div>
-          <div class="col-md-6">
-            <h2 class="mt-4"><i class="fas fa-seedling"></i> Layanan Kami</h2>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">Melacak pertumbuhan tanaman dengan grafik yang terperinci</li>
-              <li class="list-group-item">Mengelola jadwal penyiraman dengan kalender bawaan</li>
-              <li class="list-group-item">Menangkap dan menyimpan foto tanaman Anda</li>
-              <li class="list-group-item">Melihat lokasi tanaman pada peta interaktif</li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="row mt-5">
-          <div class="col-md-6">
-            <h2 class="mt-4"><i class="fas fa-comments"></i> Testimoni</h2>
-            <p>Berikut adalah apa yang dikatakan pengguna kami tentang PlantCare:</p>
-            <blockquote class="blockquote">
-              <p class="mb-0">"PlantCare telah merevolusi cara saya mengelola kebun saya. Grafik pertumbuhan dan kalender penyiraman sangat membantu!" - Jane Doe</p>
-            </blockquote>
-            <blockquote class="blockquote">
-              <p class="mb-0">"Saya suka betapa mudahnya melacak tanaman saya dengan PlantCare. Aplikasi ini ramah pengguna dan memiliki semua fitur yang saya butuhkan." - John Smith</p>
-            </blockquote>
-          </div>
-          <div class="col-md-6">
-            <h2 class="mt-4"><i class="fas fa-envelope"></i> Hubungi Kami</h2>
-            <p>Jika Anda memiliki pertanyaan atau umpan balik, jangan ragu untuk menghubungi kami di <a href="mailto:support@plantcare.com">support@plantcare.com</a>. Kami akan senang mendengar dari Anda!</p>
-            <h2 class="mt-4"><i class="fas fa-share-alt"></i> Ikuti Kami</h2>
-            <p>Ikuti kami di media sosial untuk mendapatkan berita dan pembaruan terbaru:</p>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item"><a href="https://facebook.com/plantcare" target="_blank"><i class="fab fa-facebook"></i> Facebook</a></li>
-              <li class="list-group-item"><a href="https://twitter.com/plantcare" target="_blank"><i class="fab fa-twitter"></i> Twitter</a></li>
-              <li class="list-group-item"><a href="https://instagram.com/plantcare" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></li>
-            </ul>
-          </div>
-        </div>
+  #presenter = null;
+  #map = null;
 
-        <h2 class="mt-5 text-center"><i class="fas fa-book"></i> Cerita Pengguna</h2>
-        <div id="story-list" class="row mt-4"></div>
-        <div id="map" style="height: 500px;" class="mt-4"></div>
+  async render() {
+    // Menggunakan terminologi "Cerita"
+    return `
+      <section>
+        <div class="stories-list__map__container">
+          <div id="map" class="stories-list__map"></div>
+          <div id="map-loading-container"></div>
+        </div>
+      </section>
+
+      <section class="container">
+        <h1 class="section-title">Daftar Cerita</h1>
+
+        <div class="stories-list__container">
+          <div id="stories-list"></div> 
+          <div id="stories-list-loading-container"></div>
+        </div>
       </section>
     `;
   }
 
   async afterRender() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Anda harus login terlebih dahulu untuk melihat cerita pengguna.');
-      window.location.hash = '#/login';
+    this.#presenter = new HomePresenter({
+      view: this,
+      model: StoryAPI,
+    });
+
+    await this.#presenter.initialGalleryAndMap();
+  }
+
+  populateStoriesList(stories) {
+    const storiesListContainer = document.getElementById('stories-list');
+    if (!storiesListContainer) {
+      console.error('Element with ID "stories-list" not found.');
       return;
     }
 
-    const storyList = document.getElementById('story-list');
-    const stories = await getAllStories(token);
+    if (!stories || stories.length === 0) {
+      this.populateStoriesListEmpty();
+      return;
+    }
 
-    const mapElement = document.getElementById('map');
-    const map = L.map(mapElement).setView([-2.548926, 118.0148634], 5); // Centered on Indonesia
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    stories.listStory.forEach(story => {
-      const storyItem = document.createElement('div');
-      storyItem.className = 'col-md-4 mb-4';
-      storyItem.innerHTML = `
-        <div class="card h-100">
-          <img src="${story.photoUrl}" class="card-img-top" alt="Foto ${story.name}">
-          <div class="card-body">
-            <h5 class="card-title"><i class="fas fa-user"></i> ${story.name}</h5>
-            <p class="card-text"><i class="fas fa-calendar-day"></i> ${new Date(story.createdAt).toLocaleDateString()}</p>
-            <p class="card-text"><i class="fas fa-sticky-note"></i> ${story.description}</p>
-          </div>
-        </div>
-      `;
-      storyList.appendChild(storyItem);
-
-      if (story.lat && story.lon) {
-        const marker = L.marker([story.lat, story.lon]).addTo(map);
-        marker.bindPopup(`<b>${story.name}</b><br>${story.description}`);
+    // Create row wrapper for every 3 stories
+    const rows = stories.reduce((acc, story, index) => {
+      const rowIndex = Math.floor(index / 3);
+      
+      if (!acc[rowIndex]) {
+        acc[rowIndex] = [];
       }
-    });
+      
+      this.#addStoryMarkerToMap(story);
+      
+      const storyHtml = generateReportItemTemplate({
+        id: story.id,
+        name: story.name,
+        description: story.description,
+        photoUrl: story.photoUrl,
+        createdAt: story.createdAt,
+      });
+      
+      acc[rowIndex].push(storyHtml);
+      return acc;
+    }, []);
+
+    // Convert rows array to HTML
+    const htmlContent = rows.map(row => `
+      <div class="stories-row">
+        ${row.map(story => `
+          <div class="story-column">
+            ${story}
+          </div>
+        `).join('')}
+      </div>
+    `).join('');
+
+    storiesListContainer.innerHTML = `
+      <div class="stories-grid">
+        ${htmlContent}
+      </div>
+    `;
+  }
+
+  /**
+   * Adds a marker for the story to the map, if map is initialized and story has location data.
+   * @param {Object} story - The story object containing location data.
+   */
+  #addStoryMarkerToMap(story) {
+    if (this.#map && typeof story.lat === 'number' && typeof story.lon === 'number') {
+      const coordinate = [story.lat, story.lon];
+      const markerOptions = { alt: story.name || 'Story Location' };
+      const popupContent = `
+        <strong>${story.name || 'Pengguna'}</strong><br>
+        ${story.description ? story.description.substring(0, 70) + (story.description.length > 70 ? '...' : '') : 'Tidak ada deskripsi.'}
+        ${story.photoUrl ? `<br><img src="${story.photoUrl}" alt="Story image" style="width:100px; margin-top:5px;">` : ''}
+      `;
+      const popupOptions = { content: popupContent };
+      this.#map.addMarker(coordinate, markerOptions, popupOptions);
+    }
+  }
+
+  populateStoriesListEmpty() {
+    const storiesListContainer = document.getElementById('stories-list');
+    if (storiesListContainer) {
+      // Menggunakan generateReportsListEmptyTemplate
+      storiesListContainer.innerHTML = generateReportsListEmptyTemplate('Belum ada cerita yang tersedia.');
+    }
+  }
+
+  populateStoriesListError(message) {
+    const storiesListContainer = document.getElementById('stories-list');
+    if (storiesListContainer) {
+      // Menggunakan generateReportsListErrorTemplate
+      storiesListContainer.innerHTML = generateReportsListErrorTemplate(message || 'Gagal memuat cerita.');
+    }
+  }
+
+  async initialMap() {
+    try {
+      this.showMapLoading();
+      this.#map = await Map.build('#map', {
+        zoom: 8,
+        locate: true,
+      });
+    } catch (error) {
+      console.error('Failed to initialize map:', error);
+      const mapContainer = document.getElementById('map');
+      if (mapContainer) {
+        mapContainer.innerHTML = '<p class="error-message">Peta tidak dapat dimuat.</p>';
+      }
+    } finally {
+      this.hideMapLoading();
+    }
+  }
+
+  showMapLoading() {
+    const mapLoadingContainer = document.getElementById('map-loading-container');
+    if (mapLoadingContainer) {
+      mapLoadingContainer.innerHTML = generateLoaderAbsoluteTemplate();
+    }
+  }
+
+  hideMapLoading() {
+    const mapLoadingContainer = document.getElementById('map-loading-container');
+    if (mapLoadingContainer) {
+      mapLoadingContainer.innerHTML = '';
+    }
+  }
+
+  showStoriesLoading() {
+    const storiesListLoadingContainer = document.getElementById('stories-list-loading-container');
+    if (storiesListLoadingContainer) {
+      storiesListLoadingContainer.innerHTML = generateLoaderAbsoluteTemplate();
+    }
+  }
+
+  hideStoriesLoading() {
+    const storiesListLoadingContainer = document.getElementById('stories-list-loading-container');
+    if (storiesListLoadingContainer) {
+      storiesListLoadingContainer.innerHTML = '';
+    }
   }
 }

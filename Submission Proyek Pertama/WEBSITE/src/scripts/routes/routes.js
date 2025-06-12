@@ -1,23 +1,26 @@
-import HomePage from '../pages/home/home-page';
-import AboutPage from '../pages/about/about-page';
-import MapPage from '../pages/map/map-page';
-import PlantPage from '../pages/plant/plant-page';
-import LoginPage from '../pages/login/login-page';
-import RegisterPage from '../pages/register/register-page';
-import CalendarPage from '../pages/calendar/calendar-page';
-import GrowthPage from '../pages/growth/growth-page';
-import AddStoryPage from '../pages/add-story/add-story-page';
 
-const routes = {
-  '/': new HomePage(),
-  '/about': new AboutPage(),
-  '/map': new MapPage(),
-  '/plant': new PlantPage(),
-  '/login': new LoginPage(),
-  '/register': new RegisterPage(),
-  '/calendar': new CalendarPage(),
-  '/growth': new GrowthPage(),
-  '/add-story': new AddStoryPage(),
+import RegisterPage from '../pages/auth/register/register-page';
+import LoginPage from '../pages/auth/login/login-page';
+import HomePage from '../pages/home/home-page';         
+import NewPage from '../pages/new/new-page';             
+
+import StoryDetailPage from '../pages/story-detail/story-detail-page'; 
+
+import BookmarkPage from '../pages/bookmark/bookmark-page'; 
+
+import { checkAuthenticatedRoute, checkUnauthenticatedRouteOnly } from '../utils/auth'; 
+export const routes = {
+  
+  '/login': () => checkUnauthenticatedRouteOnly(new LoginPage()),
+  '/register': () => checkUnauthenticatedRouteOnly(new RegisterPage()),
+
+  '/': () => checkAuthenticatedRoute(new HomePage()),
+  '/new': () => checkAuthenticatedRoute(new NewPage()),
+  
+  
+  '/stories/:id': () => checkAuthenticatedRoute(new StoryDetailPage()), 
+  
+  '/bookmark': () => checkAuthenticatedRoute(new BookmarkPage()),
+  
+  
 };
-
-export default routes;
