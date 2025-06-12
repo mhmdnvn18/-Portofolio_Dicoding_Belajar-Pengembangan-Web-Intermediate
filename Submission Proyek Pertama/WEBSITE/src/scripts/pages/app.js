@@ -122,52 +122,21 @@ export default class App {
         const pageInstance = await routeHandlerFunction();
 
         if (pageInstance && typeof pageInstance.render === 'function') {
-          // --- PENGGANTIAN transitionHelper DENGAN document.startViewTransition ---
           if (document.startViewTransition) {
             const transition = document.startViewTransition(async () => {
-              // Callback ini harus berisi HANYA perubahan DOM yang ingin Anda animasikan
               this.#content.innerHTML = await pageInstance.render();
               if (typeof pageInstance.afterRender === 'function') {
                 await pageInstance.afterRender();
-              } else {
-                 console.warn(`Metode afterRender tidak ditemukan pada halaman untuk URL: ${url}`);
               }
             });
-
-            try {
-              await transition.ready; // Menunggu transisi siap (snapshot lama diambil)
-              // Animasi berjalan
-              await transition.updateCallbackDone; // Menunggu DOM baru di-update dan snapshot baru diambil
-              // Transisi selesai
-              console.log('View Transition (versi sederhana) selesai dengan sukses.');
-            } catch (error) {
-              if (error.name === 'InvalidStateError') {
-                console.error('View Transition (versi sederhana) dibatalkan karena InvalidStateError:', error);
-                // Fallback: render tanpa transisi jika state tidak valid
-                this.#content.innerHTML = await pageInstance.render();
-                if (typeof pageInstance.afterRender === 'function') {
-                  await pageInstance.afterRender();
-                }
-              } else {
-                // Error lain dari View Transition API
-                console.error('View Transition (versi sederhana) error lain:', error);
-                // Render fallback jika ada error transisi lain
-                this.#content.innerHTML = await pageInstance.render();
-                if (typeof pageInstance.afterRender === 'function') {
-                  await pageInstance.afterRender();
-                }
-              }
-            }
+            await transition.ready;
+            await transition.updateCallbackDone;
           } else {
-            // Fallback untuk browser yang tidak mendukung View Transitions
-            console.log('View Transitions API tidak didukung, merender tanpa animasi.');
             this.#content.innerHTML = await pageInstance.render();
             if (typeof pageInstance.afterRender === 'function') {
               await pageInstance.afterRender();
             }
           }
-          // --- AKHIR PENGGANTIAN ---
-          
           scrollTo({ top: 0, behavior: 'smooth' });
           this.#setupNavigationList();
 

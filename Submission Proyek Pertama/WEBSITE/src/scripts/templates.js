@@ -69,7 +69,7 @@ export function generateReportItemTemplate({
   createdAt,
   lat,
   lon,
-  status = 'Menunggu Tindak Lanjut', // Placeholder status
+  status = 'Menunggu Tindak Lanjut',
 }) {
   const truncateDescription = (text, maxLength = 100) => {
     if (!text) return 'Tidak ada deskripsi.';

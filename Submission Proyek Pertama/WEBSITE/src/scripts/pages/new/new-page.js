@@ -44,7 +44,6 @@ export default class NewPage {
           </div>
         </div>
       </section>
-
       <section class="container">
         <div class="new-form__container">
           <form id="new-story-form" class="new-form">

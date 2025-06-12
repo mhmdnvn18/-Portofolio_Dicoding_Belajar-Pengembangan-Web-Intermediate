@@ -266,11 +266,10 @@ header {
 }
 
 .brand-name__link {
-  color: var(--primary-color);
+  color: #b71c1c;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-
   font-size: 1.125rem;
   font-weight: bold;
   text-decoration: none;
@@ -278,7 +277,8 @@ header {
 
 .brand-name__link__image {
   width: 35px;
-  filter: invert(12%) sepia(97%) saturate(7492%) hue-rotate(356deg) brightness(90%) contrast(110%);
+  /* filter merah tua */
+  filter: invert(13%) sepia(97%) saturate(7492%) hue-rotate(356deg) brightness(90%) contrast(110%);
 }
 
 .navigation-drawer {
@@ -1237,49 +1237,50 @@ footer {
 
 /* Add/update logo styling */
 .story-detail__section-title i {
-  color: #1e6d3f;  /* Change icon color to match brand */
+  color: #b71c1c;
 }
 
 .fa-map-marked-alt,
 .fa-file-alt,
 .fa-map-marker-alt {
-  color: #1e6d3f;
+  color: #b71c1c;
 }
 
 /* Update header icons and text */
 .brand-name__link {
-  color: #1e6d3f;
+  color: #b71c1c;
 }
 
 .brand-name__link__image {
   width: 35px;
-  filter: invert(27%) sepia(88%) saturate(431%) hue-rotate(118deg) brightness(93%) contrast(89%);
+  /* filter merah tua */
+  filter: invert(13%) sepia(97%) saturate(7492%) hue-rotate(356deg) brightness(90%) contrast(110%);
 }
 
 /* Update map marker and other icons */
 .story-detail__location-badge i,
 .story-item__location-info i,
 .story-item__createdat i {
-  color: #1e6d3f;
+  color: #b71c1c;
 }
 
 /* Update calendar and location icons */
 .fa-calendar-alt,
 .fa-map-marker-alt {
-  color: #1e6d3f;
+  color: #b71c1c;
 }
 
 .story-item__createdat i,
 .story-detail__info i,
 .report-detail__createdat i {
-  color: #1e6d3f;
+  color: #b71c1c;
 }
 
 /* Ensure consistent coloring for all date-related icons */
 [class*="calendar"],
 [class*="clock"],
 [class*="time"] {
-  color: #1e6d3f;
+  color: #b71c1c;
 }
 
 /* Add hover effect for better interaction */
@@ -1291,7 +1292,7 @@ footer {
 
 /* Bookmark Styles */
 .btn-remove {
-  background-color: #c62828; /* Merah lebih gelap */
+  background-color: #c62828;
   color: white;
   margin-top: 1rem;
 }
@@ -1301,227 +1302,17 @@ footer {
 }
 
 .saved {
-  background-color: #43a047;
+  background-color: #b71c1c;
   color: white;
 }
 
 .saved:hover {
-  background-color: #2e7d32;
+  background-color: #8e0000;
 }
 
-/* Map Control Styles */
-.leaflet-control-layers {
-  border: 2px solid rgba(0,0,0,0.2);
-  background: #fff;
-  border-radius: 5px;
-}
-
-.leaflet-control-layers-toggle {
-  width: 44px;
-  height: 44px;
-  background-color: white;
-}
-
-.leaflet-control-layers-expanded {
-  padding: 6px 10px 6px 6px;
-  color: #333;
-  background: #fff;
-}
-
-.leaflet-control-layers label {
-  margin-bottom: 5px;
-  display: block;
-}
-
-.leaflet-control-scale {
-  font-size: 11px;
-  line-height: 1.2;
-}
-
-/* Register Form Styles */
-.register-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-  padding: 2rem;
-  width: 100%;
-  position: relative;
-  z-index: 1;
-}
-
-.register-form-container {
-  width: 100%;
-  max-width: 480px;
-  background: #fff;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 2;
-}
-
-.register-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
-  position: relative;
-  z-index: 3;
-}
-
-.register-form .form-control {
-  position: relative;
-  z-index: 2;
-}
-
-.register-form__form-buttons {
-  position: relative;
-  z-index: 4;
-  margin-top: 1.5rem;
-}
-
-#submit-button-container {
-  width: 100%;
-  position: relative;
-  z-index: 5;
-}
-
-#submit-button-container .btn {
-  width: 100%;
-  position: relative;
-  z-index: 5;
-  cursor: pointer;
-  pointer-events: auto;
-}
-
-/* Fix for mobile devices */
-@media (max-width: 768px) {
-  .register-container {
-    min-height: calc(100vh - 90px);
-    padding: 1rem;
-    margin-top: 90px;
-  }
-
-  .register-form-container {
-    padding: 1.5rem;
-  }
-}
-
-/* Ensure form elements are always clickable */
-.register-form input,
-.register-form button {
-  pointer-events: auto;
-  position: relative;
-  z-index: 5;
-}
-
-/* Remove any overflow restrictions */
-body, 
-html {
-  overflow-y: auto;
-  height: auto;
-  min-height: 100%;
-}
-
-/* Story Detail Actions */
-.story-detail__footer {
-  position: relative;
-  padding: 1rem 0;
-  margin-top: 2rem;
-  z-index: 10;
-}
-
-.story-detail__actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.btn-back {
-  position: relative;
-  z-index: 11;
-  min-height: 44px;
-  padding: 0.75rem 1.5rem;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  font-weight: 500;
-  transition: background-color 0.2s;
-}
-
-.btn-back:hover {
-  background-color: var(--primary-dark-color);
-}
-
-.btn-action {
-  position: relative;
-  z-index: 11;
-  min-height: 44px;
-  padding: 0.75rem 1.5rem;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.btn-action.btn-danger {
-  background-color: #dc3545;
-}
-
-.btn-action.btn-danger:hover {
-  background-color: #bd2130;
-}
-
-/* Ensure buttons are always clickable */
-.btn-back,
-.btn-action {
-  pointer-events: auto;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Touch device optimizations */
-@media (hover: none) {
-  .btn-back,
-  .btn-action {
-    padding: 12px 20px;
-  }
-}
-
-/* Mobile responsiveness */
-@media screen and (max-width: 768px) {
-  .story-detail__actions {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .btn-back,
-  .btn-action {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
-/* Fix for iOS devices */
-@supports (-webkit-touch-callout: none) {
-  .btn-back,
-  .btn-action {
-    cursor: pointer;
-   
-  }
+/* Semua ikon Font Awesome dan ikon lain menjadi merah */
+.fa,
+[class^="fa-"],
+[class*=" fa-"] {
+  color: #b71c1c !important;
 }

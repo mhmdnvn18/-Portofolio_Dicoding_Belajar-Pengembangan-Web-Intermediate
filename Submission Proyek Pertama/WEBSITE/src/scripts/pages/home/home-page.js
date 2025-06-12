@@ -58,21 +58,18 @@ export default class HomePage {
     // Create row wrapper for every 3 stories
     const rows = stories.reduce((acc, story, index) => {
       const rowIndex = Math.floor(index / 3);
-      
-      if (!acc[rowIndex]) {
-        acc[rowIndex] = [];
-      }
-      
+      if (!acc[rowIndex]) acc[rowIndex] = [];
       this.#addStoryMarkerToMap(story);
-      
       const storyHtml = generateReportItemTemplate({
         id: story.id,
         name: story.name,
         description: story.description,
         photoUrl: story.photoUrl,
         createdAt: story.createdAt,
+        lat: story.lat,
+        lon: story.lon,
+        status: story.status || 'Menunggu Tindak Lanjut',
       });
-      
       acc[rowIndex].push(storyHtml);
       return acc;
     }, []);
@@ -102,11 +99,12 @@ export default class HomePage {
   #addStoryMarkerToMap(story) {
     if (this.#map && typeof story.lat === 'number' && typeof story.lon === 'number') {
       const coordinate = [story.lat, story.lon];
-      const markerOptions = { alt: story.name || 'Story Location' };
+      const markerOptions = { alt: story.name || 'Lokasi Laporan' };
       const popupContent = `
-        <strong>${story.name || 'Pengguna'}</strong><br>
+        <strong>${story.name || 'Warga'}</strong><br>
         ${story.description ? story.description.substring(0, 70) + (story.description.length > 70 ? '...' : '') : 'Tidak ada deskripsi.'}
-        ${story.photoUrl ? `<br><img src="${story.photoUrl}" alt="Story image" style="width:100px; margin-top:5px;">` : ''}
+        <br><small>${story.createdAt ? new Date(story.createdAt).toLocaleDateString('id-ID') : ''}</small>
+        ${story.photoUrl ? `<br><img src="${story.photoUrl}" alt="Foto laporan" style="width:100px; margin-top:5px;">` : ''}
       `;
       const popupOptions = { content: popupContent };
       this.#map.addMarker(coordinate, markerOptions, popupOptions);
