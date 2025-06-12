@@ -1,0 +1,27 @@
+{
+  "name": "BerbagiCerita - Aplikasi Berbagi Cerita",
+  "short_name": "BerbagiCerita",
+  "description": "Aplikasi untuk berbagi cerita dan pengalaman dengan lokasi",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2c63d1",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["social", "lifestyle"],
+  "lang": "id"
+} 

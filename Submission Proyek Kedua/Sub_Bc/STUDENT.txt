@@ -1,0 +1,20 @@
+Nama: Aditya Navra Erlangga
+APP_URL=https://story-api.dicoding.dev/v1
+DEPLOY_URL=<https://bc-aditya.netlify.app/>
+PWA Features Implemented:
+✅ Web App Manifest (Installable)
+✅ Service Worker (Offline Support)
+✅ Push Notifications
+✅ IndexedDB (Offline Data Storage)
+✅ Application Shell Architecture
+✅ Responsive Design
+✅ Accessibility Features
+
+Tech Stack:
+- Vanilla JavaScript (ES6+)
+- IndexedDB for offline storage
+- Service Worker for caching
+- Push API for notifications
+- Web App Manifest for installability
+- Webpack for bundling
+- Dicoding Story API

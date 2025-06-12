@@ -1,8 +1,3 @@
-// File: src/scripts/templates.js
-
-// Diasumsikan Anda memiliki utilitas ini di path yang benar
-// Jika belum ada, Anda perlu membuatnya atau mengganti pemanggilan showFormattedDate
-// dengan new Date(isoDateString).toLocaleDateString('id-ID', {...}) secara langsung.
 import { showFormattedDate } from './utils';
 
 export function generateLoaderTemplate() {
@@ -17,11 +12,13 @@ export function generateLoaderAbsoluteTemplate() {
   `;
 }
 
-// --- Navigasi Utama (Sudah disesuaikan) ---
 export function generateMainNavigationListTemplate() {
   return `
-    <li><a id="report-list-button" class="report-list-button" href="#/">Daftar Laporan</a></li>
-    <li><a id="statistics-button" class="statistics-button" href="#/statistics">Statistik Wilayah</a></li>
+    <li><a id="story-list-button" class="story-list-button" href="#/">Daftar Cerita</a></li>
+    <li><a id="offline-button" class="offline-button" href="#/offline">
+      <i class="fas fa-database"></i> Data Offline
+    </a></li>
+    
   `;
 }
 
@@ -29,23 +26,22 @@ export function generateUnauthenticatedNavigationListTemplate() {
   return `
     <li id="push-notification-tools" class="push-notification-tools"></li>
     <li><a id="login-button" href="#/login">Login</a></li>
-    <li><a id="register-button" href="#/register">Daftar</a></li>
+    <li><a id="register-button" href="#/register">Register</a></li>
   `;
 }
 
 export function generateAuthenticatedNavigationListTemplate() {
   return `
     <li id="push-notification-tools" class="push-notification-tools"></li>
-    <li><a id="new-report-button" class="btn new-report-button" href="#/new">Buat Laporan <i class="fas fa-plus"></i></a></li>
+    <li><a id="new-story-button" class="btn new-story-button" href="#/new">Buat Cerita <i class="fas fa-plus"></i></a></li>
     <li><a id="logout-button" class="logout-button" href="#/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
   `;
 }
 
-// --- Template untuk Daftar Cerita (Sudah disesuaikan) ---
-export function generateReportsListEmptyTemplate(message = 'Saat ini, tidak ada laporan yang dapat ditampilkan.') {
+export function generateReportsListEmptyTemplate(message = 'Saat ini, tidak ada cerita yang dapat ditampilkan.') {
   return `
-    <div id="reports-list-empty" class="reports-list__empty">
-      <h2>Tidak ada laporan yang tersedia</h2>
+    <div id="stories-list-empty" class="stories-list__empty">
+      <h2>Tidak ada cerita yang tersedia</h2>
       <p>${message}</p>
     </div>
   `;
@@ -53,14 +49,13 @@ export function generateReportsListEmptyTemplate(message = 'Saat ini, tidak ada 
 
 export function generateReportsListErrorTemplate(message) {
   return `
-    <div id="reports-list-error" class="reports-list__error">
-      <h2>Terjadi kesalahan pengambilan daftar laporan</h2>
+    <div id="stories-list-error" class="stories-list__error">
+      <h2>Terjadi kesalahan pengambilan daftar cerita</h2>
       <p>${message || 'Gunakan jaringan lain atau laporkan error ini.'}</p>
     </div>
   `;
 }
 
-// Template untuk Item Cerita di Daftar (nama fungsi dipertahankan generateReportItemTemplate)
 export function generateReportItemTemplate({
   id,
   name,
@@ -69,7 +64,6 @@ export function generateReportItemTemplate({
   createdAt,
   lat,
   lon,
-  status = 'Menunggu Tindak Lanjut',
 }) {
   const truncateDescription = (text, maxLength = 100) => {
     if (!text) return 'Tidak ada deskripsi.';
@@ -77,19 +71,19 @@ export function generateReportItemTemplate({
     return `${text.substring(0, maxLength)}...`;
   };
   const locationText = (typeof lat === 'number' && typeof lon === 'number') ? 'Lokasi disertakan' : '';
-  const placeholderImage = 'images/placeholder-image.jpg';
+  const placeholderImage = 'images/placeholder-image.jpg'; // Definisikan path placeholder
 
   return `
     <div tabindex="0" class="story-item" data-storyid="${id}">
       <img 
         class="story-item__image" 
         src="${photoUrl || placeholderImage}" 
-        alt="Gambar laporan oleh ${name || 'Warga'}"
+        alt="Gambar cerita oleh ${name || 'Pengguna'}"
         onerror="this.onerror=null;this.src='${placeholderImage}';"
       >
       <div class="story-item__body">
         <div class="story-item__main">
-          <h2 class="story-item__title">${name || 'Warga Anonim'}</h2>
+          <h2 class="story-item__title">${name || 'Pengguna Anonim'}</h2>
           <div class="story-item__more-info">
             <div class="story-item__createdat">
               <i class="fas fa-calendar-alt"></i> ${showFormattedDate(createdAt, 'id-ID')}
@@ -98,9 +92,6 @@ export function generateReportItemTemplate({
             <div class="story-item__location-info">
               <i class="fas fa-map-marker-alt"></i> ${locationText}
             </div>` : ''}
-            <div class="story-item__status">
-              <i class="fas fa-tasks"></i> Status: <span>${status}</span>
-            </div>
           </div>
         </div>
         <div class="story-item__description">
@@ -108,72 +99,31 @@ export function generateReportItemTemplate({
         </div>
         <div class="story-item__more-info">
           <div class="story-item__author">
-            Dilaporkan oleh: ${name || 'Warga Anonim'}
+            Dibuat oleh: ${name || 'Pengguna Anonim'}
           </div>
         </div>
         <a class="btn story-item__read-more" href="#/stories/${id}">
-          Detail Laporan <i class="fas fa-arrow-right"></i>
+          Selengkapnya <i class="fas fa-arrow-right"></i>
         </a>
       </div>
     </div>
   `;
 }
 
-// --- Template untuk Detail Cerita (Implementasi Lebih Lengkap) ---
 export function generateStoryDetailTemplate(story) {
   if (!story) {
     return generateStoryDetailErrorTemplate();
   }
 
   const {
-    name = 'Warga Anonim',
-    description = 'Tidak ada deskripsi yang diberikan untuk laporan ini.',
+    name = 'Pengguna Anonim',
+    description = 'Tidak ada deskripsi yang diberikan untuk cerita ini.',
     photoUrl = 'images/placeholder-image.jpg',
     createdAt,
     lat,
     lon,
-    locationName,
-    status = 'Menunggu Tindak Lanjut',
-    statistics = null,
-    responses = [],
+    locationName 
   } = story;
-
-  // Fungsi untuk menampilkan statistik wilayah hanya dari data yang ada (tidak kosong/null/undefined)
-  function renderStatistics(statistics) {
-    if (!statistics || typeof statistics !== 'object') {
-      return '<p>(Statistik laporan per wilayah akan ditampilkan di sini)</p>';
-    }
-    // Filter hanya properti yang nilainya tidak null/undefined/NaN/empty string
-    const filteredEntries = Object.entries(statistics).filter(
-      ([, value]) =>
-        value !== null &&
-        value !== undefined &&
-        value !== '' &&
-        !(typeof value === 'number' && isNaN(value))
-    );
-    if (filteredEntries.length === 0) {
-      return '<p>(Statistik laporan per wilayah akan ditampilkan di sini)</p>';
-    }
-    return `
-      <table style="width:100%;max-width:400px;margin:auto;border-collapse:collapse;">
-        <tbody>
-          ${filteredEntries
-            .map(
-              ([key, value]) =>
-                `<tr>
-                  <td style="padding:6px 12px;border-bottom:1px solid #eee;text-align:left;">
-                    <b>${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</b>
-                  </td>
-                  <td style="padding:6px 12px;border-bottom:1px solid #eee;text-align:right;">
-                    ${value}
-                  </td>
-                </tr>`
-            )
-            .join('')}
-        </tbody>
-      </table>
-    `;
-  }
 
   return `
     <article class="story-detail">
@@ -186,9 +136,6 @@ export function generateStoryDetailTemplate(story) {
               ${showFormattedDate(createdAt, 'id-ID')}
             </span>
             ${generateLocationBadge(lat, lon, locationName)}
-            <span class="story-detail__status">
-              <i class="fas fa-tasks"></i> Status: <b>${status}</b>
-            </span>
           </div>
         </div>
       </header>
@@ -198,7 +145,7 @@ export function generateStoryDetailTemplate(story) {
           <figure class="story-detail__figure">
             <img 
               src="${photoUrl}" 
-              alt="Foto utama laporan oleh ${name}" 
+              alt="Foto utama cerita oleh ${name}" 
               class="story-detail__main-image"
               onerror="this.onerror=null;this.src='images/placeholder-image.jpg';" 
             />
@@ -208,7 +155,7 @@ export function generateStoryDetailTemplate(story) {
         <div class="story-detail__text">
           <section class="story-detail__description">
             <h2 class="story-detail__section-title">
-              <i class="fas fa-file-alt"></i> Deskripsi Laporan
+              <i class="fas fa-file-alt"></i> Deskripsi Cerita
             </h2>
             <div class="story-detail__description-content">
               ${formatDescription(description)}
@@ -216,35 +163,6 @@ export function generateStoryDetailTemplate(story) {
           </section>
 
           ${generateLocationSection(lat, lon)}
-
-          <section class="story-detail__status-section">
-            <h2 class="story-detail__section-title">
-              <i class="fas fa-info-circle"></i> Status Tindak Lanjut
-            </h2>
-            <div class="story-detail__status-content">
-              <p>Status laporan: <b>${status}</b></p>
-              <p>(Fitur update status oleh instansi akan segera hadir)</p>
-            </div>
-          </section>
-
-          <section class="story-detail__statistics-section">
-            <h2 class="story-detail__section-title">
-              <i class="fas fa-chart-bar"></i> Statistik Wilayah
-            </h2>
-            <div class="story-detail__statistics-content">
-              ${renderStatistics(statistics)}
-            </div>
-          </section>
-
-          <section class="story-detail__responses-section">
-            <h2 class="story-detail__section-title">
-              <i class="fas fa-comments"></i> Tanggapan Instansi/Masyarakat
-            </h2>
-            <div class="story-detail__responses-content">
-              ${responses.length > 0 ? responses.map(r => `<div class="response-item">${r}</div>`).join('') : '<p>Belum ada tanggapan.</p>'}
-              <p>(Kolom tanggapan akan segera hadir)</p>
-            </div>
-          </section>
         </div>
       </div>
 
@@ -254,7 +172,9 @@ export function generateStoryDetailTemplate(story) {
             <i class="fas fa-arrow-left"></i> Kembali ke Daftar
           </a>
           <div id="story-actions" class="story-detail__action-buttons" style="position: relative; z-index: 100;">
-            <!-- Action buttons will be injected here -->
+            <button id="favorite-button" class="btn btn-action">
+              <i class="fas fa-heart"></i> <span id="favorite-text">Tambah ke Favorit</span>
+            </button>
           </div>
         </div>
       </footer>
@@ -262,7 +182,6 @@ export function generateStoryDetailTemplate(story) {
   `;
 }
 
-// Helper functions
 function formatDescription(description) {
   return description
     .split('\n')
@@ -304,7 +223,6 @@ function generateLocationSection(lat, lon) {
   `;
 }
 
-// Fungsi ini diubah namanya agar lebih jelas untuk error di halaman detail cerita
 export function generateStoryDetailErrorTemplate(message) {
   return `
     <div id="story-detail-error" class="story-detail__error">
@@ -344,8 +262,6 @@ function generateStoryDetailHeader(name, createdAt, lat, lon) {
     </header>
   `;
 }
-
-
 
 export function generateCommentsListEmptyTemplate() {
   return ''; 
