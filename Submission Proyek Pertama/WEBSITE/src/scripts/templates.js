@@ -133,10 +133,28 @@ export function generateStoryDetailTemplate(story) {
     lat,
     lon,
     locationName,
-    status = 'Menunggu Tindak Lanjut', // Placeholder status
-    statistics = null, // Placeholder statistik
-    responses = [], // Placeholder tanggapan
+    status = 'Menunggu Tindak Lanjut',
+    statistics = null, // Statistik wilayah, bisa berupa objek atau null
+    responses = [],
   } = story;
+
+  // Fungsi untuk menampilkan statistik wilayah jika tersedia
+  function renderStatistics(statistics) {
+    if (!statistics || typeof statistics !== 'object' || Object.keys(statistics).length === 0) {
+      return '<p>(Statistik laporan per wilayah akan ditampilkan di sini)</p>';
+    }
+    // Contoh: statistik = { totalReports: 12, resolved: 5, unresolved: 7 }
+    return `
+      <ul>
+        ${Object.entries(statistics)
+          .map(
+            ([key, value]) =>
+              `<li><b>${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</b> ${value}</li>`
+          )
+          .join('')}
+      </ul>
+    `;
+  }
 
   return `
     <article class="story-detail">
@@ -195,7 +213,7 @@ export function generateStoryDetailTemplate(story) {
               <i class="fas fa-chart-bar"></i> Statistik Wilayah
             </h2>
             <div class="story-detail__statistics-content">
-              <p>(Statistik laporan per wilayah akan ditampilkan di sini)</p>
+              ${renderStatistics(statistics)}
             </div>
           </section>
 
