@@ -38,7 +38,7 @@ export default class NewPresenter {
       // Lakukan pengecekan dasar pada respons
       if (!response || typeof response.ok === 'undefined') {
         console.error('NewPresenter: Invalid response from API when adding story:', response);
-        throw new Error('Respons tidak valid dari API saat menambahkan cerita.');
+        throw new Error('Respons tidak valid dari API saat menambahkan laporan.');
       }
 
       if (!response.ok) {
@@ -46,7 +46,7 @@ export default class NewPresenter {
         console.error('NewPresenter: Failed to add new story (API response not OK):', response);
         if (typeof this.#view.storyAddFailed === 'function') {
           // Gunakan response.message jika ada, atau pesan default
-          this.#view.storyAddFailed(response.message || 'Gagal mengunggah cerita. Silakan coba lagi.');
+          this.#view.storyAddFailed(response.message || 'Gagal mengunggah laporan. Silakan coba lagi.');
         }
         return; // Hentikan eksekusi lebih lanjut jika gagal
       }
@@ -54,7 +54,7 @@ export default class NewPresenter {
       // Jika berhasil, panggil callback sukses di View
       // Respon sukses dari POST /stories biasanya: { "error": false, "message": "success" }
       if (typeof this.#view.storySuccessfullyAdded === 'function') {
-        this.#view.storySuccessfullyAdded(response.message || 'Cerita berhasil diunggah!');
+        this.#view.storySuccessfullyAdded(response.message || 'Laporan berhasil diunggah!');
       } else {
         console.error('NewPresenter: this.#view.storySuccessfullyAdded is not a function. Check NewPage.js');
       }
@@ -62,7 +62,7 @@ export default class NewPresenter {
     } catch (error) { // Menangkap error jaringan atau error JavaScript lainnya
       console.error('NewPresenter: Unexpected error submitting new story:', error);
       if (typeof this.#view.storyAddFailed === 'function') {
-        this.#view.storyAddFailed(error.message || 'Terjadi kesalahan. Tidak dapat mengunggah cerita.');
+        this.#view.storyAddFailed(error.message || 'Terjadi kesalahan. Tidak dapat mengunggah laporan.');
       }
     } finally {
       // 3. Selalu sembunyikan tombol loading di View, apapun hasilnya

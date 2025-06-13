@@ -301,7 +301,7 @@ class PushNotificationHelper {
   async testNotification() {
     if ('Notification' in window && Notification.permission === 'granted') {
       new Notification('Test Notification', {
-        body: 'Ini adalah notifikasi test dari BerbagiCerita',
+        body: 'Ini adalah notifikasi test dari Laporan',
         icon: '/favicon.png',
         badge: '/favicon.png'
       });

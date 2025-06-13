@@ -1,7 +1,7 @@
 {
-  "name": "BerbagiCerita - Aplikasi Berbagi Cerita",
-  "short_name": "BerbagiCerita",
-  "description": "Aplikasi untuk berbagi cerita dan pengalaman dengan lokasi",
+  "name": "Laporan - Aplikasi Laporan",
+  "short_name": "Laporan",
+  "description": "Aplikasi untuk membuat dan melacak laporan dengan lokasi",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

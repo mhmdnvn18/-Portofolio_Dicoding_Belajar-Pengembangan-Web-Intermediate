@@ -33,10 +33,10 @@ export default class NewPage {
       <section>
         <div class="new-story__header">
           <div class="container">
-            <h1 class="new-story__header__title">Buat Cerita Baru</h1>
+            <h1 class="new-story__header__title">Buat Laporan Baru</h1>
             <p class="new-story__header__description">
-              Bagikan ceritamu dengan melengkapi formulir di bawah ini.<br>
-              Pastikan foto dan deskripsi jelas. Foto cerita wajib diisi.
+              Bagikan laporan dengan melengkapi formulir di bawah ini.<br>
+              Pastikan foto dan deskripsi jelas. Foto laporan wajib diisi.
             </p>
           </div>
         </div>
@@ -46,14 +46,14 @@ export default class NewPage {
         <div class="new-form__container">
           <form id="new-story-form" class="new-form">
             <div class="form-control">
-              <label for="description-input" class="new-form__description__title">Deskripsi Cerita <span class="required-asterisk">*</span></label>
+              <label for="description-input" class="new-form__description__title">Deskripsi Laporan <span class="required-asterisk">*</span></label>
               <div class="new-form__description__container">
-                <textarea id="description-input" name="description" placeholder="Tuliskan ceritamu di sini..." rows="5" required></textarea>
+                <textarea id="description-input" name="description" placeholder="Tuliskan laporan Anda di sini..." rows="5" required></textarea>
               </div>
             </div>
             <div class="form-control">
-              <label for="photo-input-button" class="new-form__photo__title">Foto Cerita <span class="required-asterisk">*</span></label>
-              <div id="photo-more-info" class="form-text">Unggah satu foto untuk ceritamu (maks. 1MB).</div>
+              <label for="photo-input-button" class="new-form__photo__title">Foto Laporan <span class="required-asterisk">*</span></label>
+              <div id="photo-more-info" class="form-text">Unggah satu foto untuk laporan Anda (maks. 1MB).</div>
               <div class="new-form__photo__container">
                 <div class="new-form__photo__buttons">
                   <button id="photo-input-button" class="btn btn-outline" type="button">Pilih dari Galeri</button>
@@ -88,7 +88,7 @@ export default class NewPage {
             </div>
             <div class="form-buttons">
               <span id="submit-button-container">
-                <button class="btn" type="submit">Unggah Cerita</button>
+                <button class="btn" type="submit">Unggah Laporan</button>
               </span>
               <a class="btn btn-outline" href="#/">Batal</a>
             </div>
@@ -145,11 +145,11 @@ export default class NewPage {
       const longitude = this.#longitudeInput.value;
 
       if (!description.trim()) {
-        this.storyAddFailed('Deskripsi cerita wajib diisi.');
+        this.storyAddFailed('Deskripsi laporan wajib diisi.');
         return;
       }
       if (!this.#currentPhotoFile) {
-        this.storyAddFailed('Foto cerita wajib diunggah.');
+        this.storyAddFailed('Foto laporan wajib diunggah.');
         return;
       }
 
@@ -264,7 +264,7 @@ export default class NewPage {
       const imageUrl = URL.createObjectURL(this.#currentPhotoFile);
       const imgElement = document.createElement('img');
       imgElement.src = imageUrl;
-      imgElement.alt = 'Preview foto cerita';
+      imgElement.alt = 'Preview foto laporan';
       imgElement.style.maxWidth = '100%';
       imgElement.style.maxHeight = '250px';
       imgElement.style.marginTop = '10px';
@@ -350,14 +350,14 @@ export default class NewPage {
 
   storySuccessfullyAdded(message) {
     console.log('Story Added Successfully:', message);
-    alert(message || 'Cerita berhasil ditambahkan!'); 
+    alert(message || 'Laporan berhasil ditambahkan!'); 
     this.clearForm();
     location.hash = '#/'; 
   }
 
   storyAddFailed(message) {
     console.error('Story Add Failed:', message);
-    alert(message || 'Gagal menambahkan cerita. Silakan coba lagi.');
+    alert(message || 'Gagal menambahkan laporan. Silakan coba lagi.');
   }
 
   clearForm() {
@@ -385,7 +385,7 @@ export default class NewPage {
   hideSubmitLoadingButton() {
     if (this.#submitButtonContainer) {
       this.#submitButtonContainer.innerHTML = `
-        <button class="btn" type="submit">Unggah Cerita</button>
+        <button class="btn" type="submit">Unggah Laporan</button>
       `;
     }
   }

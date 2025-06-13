@@ -24,7 +24,7 @@ export default class StoryDetailPage {
       <section class="container story-detail-page-container" aria-live="polite">
         <div id="story-detail-loading-container" class="loading-container-absolute"></div>
         <article id="story-detail-content" class="story-detail-content">
-          <h2>Memuat Detail Cerita...</h2>
+          <h2>Memuat Detail Laporan...</h2>
         </article>
       </section>
     `;
@@ -44,8 +44,8 @@ export default class StoryDetailPage {
     this.#storyId = urlParts.id;
 
     if (!this.#storyId) {
-      console.error('ID Cerita tidak ditemukan di URL untuk halaman detail.');
-      this.displayError('Halaman tidak valid atau ID Cerita tidak ditemukan.');
+      console.error('ID Laporan tidak ditemukan di URL untuk halaman detail.');
+      this.displayError('Halaman tidak valid atau ID Laporan tidak ditemukan.');
       return;
     }
     
@@ -76,7 +76,7 @@ export default class StoryDetailPage {
     } else {
       const mapContainer = document.getElementById('story-map-detail');
       if (mapContainer) {
-        mapContainer.innerHTML = '<p style="text-align:center; padding:10px;">Lokasi tidak tersedia untuk cerita ini.</p>';
+        mapContainer.innerHTML = '<p style="text-align:center; padding:10px;">Lokasi tidak tersedia untuk laporan ini.</p>';
       }
     }
 
@@ -122,11 +122,11 @@ export default class StoryDetailPage {
       if (this.#isFavorite) {
         await IndexedDBHelper.deleteFavorite(this.#storyId);
         this.#isFavorite = false;
-        this.#showNotification('Cerita dihapus dari favorit');
+        this.#showNotification('Laporan dihapus dari favorit');
       } else {
         await IndexedDBHelper.saveFavorite(this.#currentStory);
         this.#isFavorite = true;
-        this.#showNotification('Cerita ditambahkan ke favorit');
+        this.#showNotification('Laporan ditambahkan ke favorit');
       }
       this.#updateFavoriteButtonUI();
     } catch (error) {
@@ -173,7 +173,7 @@ export default class StoryDetailPage {
 
   displayError(message) {
     if (!this.#storyDetailContentElement) return;
-    this.#storyDetailContentElement.innerHTML = generateStoryDetailErrorTemplate(message || 'Gagal memuat detail cerita. Silakan coba lagi nanti.');
+    this.#storyDetailContentElement.innerHTML = generateStoryDetailErrorTemplate(message || 'Gagal memuat detail laporan. Silakan coba lagi nanti.');
     this.hideLoading();
   }
 
@@ -191,7 +191,7 @@ export default class StoryDetailPage {
   }
 
   
-  async _initializeMapForDetail(lat, lon, storyCreatorName = 'Lokasi Cerita') {
+  async _initializeMapForDetail(lat, lon, storyCreatorName = 'Lokasi Laporan') {
   
     const mapContainer = document.getElementById('story-map-detail'); 
     
@@ -206,7 +206,7 @@ export default class StoryDetailPage {
 
         if (this.#mapInstance) {
             const markerOptions = { title: storyCreatorName }; // Opsi untuk marker
-            const popupOptions = { content: `<strong>${storyCreatorName}</strong><br>Lokasi cerita.` }; // Opsi untuk popup
+            const popupOptions = { content: `<strong>${storyCreatorName}</strong><br>Lokasi laporan.` }; // Opsi untuk popup
             this.#mapInstance.addMarker([lat, lon], markerOptions, popupOptions);
         } else {
             throw new Error("Map.build tidak mengembalikan instance peta.");

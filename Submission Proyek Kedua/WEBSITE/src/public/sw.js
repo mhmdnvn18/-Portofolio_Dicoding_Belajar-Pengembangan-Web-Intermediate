@@ -1,4 +1,4 @@
-const CACHE_NAME = 'berbagicerita-v1';
+const CACHE_NAME = 'laporan-v1';
 const urlsToCache = [
   '/',
   '/app.bundle.js',
@@ -142,8 +142,8 @@ self.addEventListener('push', (event) => {
       notificationData = event.data.json();
     } catch (error) {
       notificationData = {
-        title: 'BerbagiCerita',
-        body: event.data.text() || 'Ada cerita baru untuk Anda!',
+        title: 'Laporan',
+        body: event.data.text() || 'Ada laporan baru untuk Anda!',
         icon: '/favicon.png',
         badge: '/favicon.png',
         data: {
@@ -153,8 +153,8 @@ self.addEventListener('push', (event) => {
     }
   } else {
     notificationData = {
-      title: 'BerbagiCerita',
-      body: 'Ada cerita baru untuk Anda!',
+      title: 'Laporan',
+      body: 'Ada laporan baru untuk Anda!',
       icon: '/favicon.png',
       badge: '/favicon.png',
       data: {
@@ -164,8 +164,8 @@ self.addEventListener('push', (event) => {
   }
 
   const options = {
-    title: notificationData.title || 'BerbagiCerita',
-    body: notificationData.body || 'Ada cerita baru untuk Anda!',
+    title: notificationData.title || 'Laporan',
+    body: notificationData.body || 'Ada laporan baru untuk Anda!',
     icon: notificationData.icon || '/favicon.png',
     badge: notificationData.badge || '/favicon.png',
     vibrate: [100, 50, 100],

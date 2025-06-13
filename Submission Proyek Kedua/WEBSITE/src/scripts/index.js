@@ -9,7 +9,7 @@ import Camera from './utils/camera';
 import PushNotificationHelper from './utils/push-notification';
 import IndexedDBHelper from './utils/indexeddb';
 
-class BerbagiCeritaAPI {
+class LaporanAPI {
   static async login(credentials) {
     try {
       const response = await fetch('YOUR_API_ENDPOINT/login', {
@@ -202,7 +202,18 @@ function isPWA() {
          document.referrer.includes('android-app://');
 }
 
-export default BerbagiCeritaAPI;
+// Test push notification
+function testNotification() {
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification('Test Notification', {
+      body: 'Ini adalah notifikasi test dari Laporan',
+      icon: '/favicon.png',
+      badge: '/favicon.png'
+    });
+  }
+}
+
+export default LaporanAPI;
 
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('App starting...', isPWA() ? 'Running as PWA' : 'Running in browser');

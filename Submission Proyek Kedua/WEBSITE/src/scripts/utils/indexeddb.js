@@ -1,4 +1,4 @@
-const DB_NAME = 'BerbagiCeritaDB';
+const DB_NAME = 'LaporanDB';
 const DB_VERSION = 1;
 const STORIES_STORE = 'stories';
 const FAVORITES_STORE = 'favorites';
@@ -301,4 +301,4 @@ class IndexedDBHelper {
 
 // Export singleton instance
 const indexedDBHelper = new IndexedDBHelper();
-export default indexedDBHelper; 
+export default indexedDBHelper;

@@ -33,13 +33,13 @@ export default class HomePresenter {
       const response = await this.#model.getAllStories({});
 
       if (!response || typeof response.ok === 'undefined') {
-        throw new Error('Respons tidak valid dari API cerita.');
+        throw new Error('Respons tidak valid dari API laporan.');
       }
 
       if (!response.ok) {
         console.error('HomePresenter: Failed to fetch stories (API response not OK):', response);
         if (typeof this.#view.populateStoriesListError === 'function') {
-          this.#view.populateStoriesListError(response.message || 'Gagal memuat cerita dari server.');
+          this.#view.populateStoriesListError(response.message || 'Gagal memuat laporan dari server.');
         }
         return; 
       }
@@ -66,7 +66,7 @@ export default class HomePresenter {
         
         console.error('HomePresenter: Invalid story list data in API response:', response);
         if (typeof this.#view.populateStoriesListError === 'function') {
-          this.#view.populateStoriesListError('Data cerita tidak valid diterima dari server.');
+          this.#view.populateStoriesListError('Data laporan tidak valid diterima dari server.');
         }
       }
 
