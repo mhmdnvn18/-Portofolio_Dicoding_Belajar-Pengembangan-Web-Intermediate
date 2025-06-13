@@ -22,8 +22,7 @@ export default class HomePage {
       </section>
 
       <section class="container">
-        <h1 class="section-title">Daftar Cerita</h1>
-
+        <h1 class="section-title">Daftar Laporan</h1>
         <div class="stories-list__container">
           <div id="stories-list"></div> 
           <div id="stories-list-loading-container"></div>
@@ -112,14 +111,14 @@ export default class HomePage {
   populateStoriesListEmpty() {
     const storiesListContainer = document.getElementById('stories-list');
     if (storiesListContainer) {
-      storiesListContainer.innerHTML = generateReportsListEmptyTemplate('Belum ada cerita yang tersedia.');
+      storiesListContainer.innerHTML = generateReportsListEmptyTemplate('Belum ada laporan yang tersedia.');
     }
   }
 
   populateStoriesListError(message) {
     const storiesListContainer = document.getElementById('stories-list');
     if (storiesListContainer) {
-      storiesListContainer.innerHTML = generateReportsListErrorTemplate(message || 'Gagal memuat cerita.');
+      storiesListContainer.innerHTML = generateReportsListErrorTemplate(message || 'Gagal memuat laporan.');
     }
   }
 

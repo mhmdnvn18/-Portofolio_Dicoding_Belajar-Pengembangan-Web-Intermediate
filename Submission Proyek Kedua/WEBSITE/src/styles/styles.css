@@ -1541,7 +1541,7 @@ html {
   }
 }
 
-/* Pastikan judul section di detail cerita berwarna merah */
+/* Pastikan judul section di detail laporan berwarna merah */
 .story-detail__section-title,
 .story-detail__section-title i {
   color: #d32f2f !important;

@@ -14,7 +14,7 @@ export function generateLoaderAbsoluteTemplate() {
 
 export function generateMainNavigationListTemplate() {
   return `
-    <li><a id="story-list-button" class="story-list-button" href="#/">Daftar Cerita</a></li>
+    <li><a id="story-list-button" class="story-list-button" href="#/">Daftar Laporan</a></li>
     <li><a id="offline-button" class="offline-button" href="#/offline">
       <i class="fas fa-database"></i> Data Offline
     </a></li>
@@ -33,15 +33,15 @@ export function generateUnauthenticatedNavigationListTemplate() {
 export function generateAuthenticatedNavigationListTemplate() {
   return `
     <li id="push-notification-tools" class="push-notification-tools"></li>
-    <li><a id="new-story-button" class="btn new-story-button" href="#/new">Buat Cerita <i class="fas fa-plus"></i></a></li>
+    <li><a id="new-story-button" class="btn new-story-button" href="#/new">Buat Laporan <i class="fas fa-plus"></i></a></li>
     <li><a id="logout-button" class="logout-button" href="#/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
   `;
 }
 
-export function generateReportsListEmptyTemplate(message = 'Saat ini, tidak ada cerita yang dapat ditampilkan.') {
+export function generateReportsListEmptyTemplate(message = 'Saat ini, tidak ada laporan yang dapat ditampilkan.') {
   return `
     <div id="stories-list-empty" class="stories-list__empty">
-      <h2>Tidak ada cerita yang tersedia</h2>
+      <h2>Tidak ada laporan yang tersedia</h2>
       <p>${message}</p>
     </div>
   `;
@@ -50,7 +50,7 @@ export function generateReportsListEmptyTemplate(message = 'Saat ini, tidak ada 
 export function generateReportsListErrorTemplate(message) {
   return `
     <div id="stories-list-error" class="stories-list__error">
-      <h2>Terjadi kesalahan pengambilan daftar cerita</h2>
+      <h2>Terjadi kesalahan pengambilan daftar laporan</h2>
       <p>${message || 'Gunakan jaringan lain atau laporkan error ini.'}</p>
     </div>
   `;
@@ -78,7 +78,7 @@ export function generateReportItemTemplate({
       <img 
         class="story-item__image" 
         src="${photoUrl || placeholderImage}" 
-        alt="Gambar cerita oleh ${name || 'Pengguna'}"
+        alt="Gambar laporan oleh ${name || 'Pengguna'}"
         onerror="this.onerror=null;this.src='${placeholderImage}';"
       >
       <div class="story-item__body">
@@ -117,7 +117,7 @@ export function generateStoryDetailTemplate(story) {
 
   const {
     name = 'Pengguna Anonim',
-    description = 'Tidak ada deskripsi yang diberikan untuk cerita ini.',
+    description = 'Tidak ada deskripsi yang diberikan untuk laporan ini.',
     photoUrl = 'images/placeholder-image.jpg',
     createdAt,
     lat,
@@ -145,7 +145,7 @@ export function generateStoryDetailTemplate(story) {
           <figure class="story-detail__figure">
             <img 
               src="${photoUrl}" 
-              alt="Foto utama cerita oleh ${name}" 
+              alt="Foto utama laporan oleh ${name}" 
               class="story-detail__main-image"
               onerror="this.onerror=null;this.src='images/placeholder-image.jpg';" 
             />
@@ -155,7 +155,7 @@ export function generateStoryDetailTemplate(story) {
         <div class="story-detail__text">
           <section class="story-detail__description">
             <h2 class="story-detail__section-title">
-              <i class="fas fa-file-alt"></i> Deskripsi Cerita
+              <i class="fas fa-file-alt"></i> Deskripsi Laporan
             </h2>
             <div class="story-detail__description-content">
               ${formatDescription(description)}
@@ -206,7 +206,7 @@ function generateLocationSection(lat, lon) {
   return `
     <section class="story-detail__location">
       <h2 class="story-detail__section-title">
-        <i class="fas fa-map-marked-alt"></i> Lokasi Cerita
+        <i class="fas fa-map-marked-alt"></i> Lokasi Laporan
       </h2>
       <div class="story-detail__map-container">
         <div id="story-map-detail" class="story-detail__map">
@@ -226,7 +226,7 @@ function generateLocationSection(lat, lon) {
 export function generateStoryDetailErrorTemplate(message) {
   return `
     <div id="story-detail-error" class="story-detail__error">
-      <h2>Terjadi kesalahan pengambilan detail cerita</h2>
+      <h2>Terjadi kesalahan pengambilan detail laporan</h2>
       <p>${message || 'Gunakan jaringan lain atau laporkan error ini.'}</p>
     </div>
   `;
@@ -311,7 +311,7 @@ export function generateSaveReportButtonTemplate() {
       class="btn btn-action"
       style="position: relative; z-index: 100;"
     >
-      <i class="fas fa-bookmark"></i> Simpan Cerita
+      <i class="fas fa-bookmark"></i> Simpan Laporan
     </button>
   `;
 }
@@ -323,7 +323,7 @@ export function generateRemoveReportButtonTemplate() {
       class="btn btn-action btn-danger"
       style="position: relative; z-index: 100;"
     >
-      <i class="fas fa-trash"></i> Hapus Cerita
+      <i class="fas fa-trash"></i> Hapus Laporan
     </button>
   `;
 }
