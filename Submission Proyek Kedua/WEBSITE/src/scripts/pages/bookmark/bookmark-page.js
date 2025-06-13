@@ -5,7 +5,7 @@ export default class BookmarkPage {
   async render() {
     return `
       <section class="content">
-      
+        <h1 class="section-title">Laporan Favorit</h1>
         <div id="bookmarks-container" class="stories-list">
         </div>
       </section>
@@ -17,7 +17,12 @@ export default class BookmarkPage {
     const bookmarks = BookmarkStorage.getAllBookmarks();
 
     if (!bookmarks.length) {
-      
+      bookmarksContainer.innerHTML = `
+        <div class="stories-list__empty">
+          <h2>Tidak ada laporan favorit</h2>
+          <p>Simpan laporan sebagai favorit untuk mengaksesnya di sini.</p>
+        </div>
+      `;
       return;
     }
 
@@ -48,7 +53,12 @@ export default class BookmarkPage {
         item.remove();
         
         if (!BookmarkStorage.getAllBookmarks().length) {
-        
+          bookmarksContainer.innerHTML = `
+            <div class="stories-list__empty">
+              <h2>Tidak ada laporan favorit</h2>
+              <p>Simpan laporan sebagai favorit untuk mengaksesnya di sini.</p>
+            </div>
+          `;
         }
       });
 

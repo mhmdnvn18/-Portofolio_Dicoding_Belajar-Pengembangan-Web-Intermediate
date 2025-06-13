@@ -1,4 +1,3 @@
-
 import RegisterPage from '../pages/auth/register/register-page';
 import LoginPage from '../pages/auth/login/login-page';
 import HomePage from '../pages/home/home-page';         
@@ -8,6 +7,7 @@ import StoryDetailPage from '../pages/story-detail/story-detail-page';
 
 import BookmarkPage from '../pages/bookmark/bookmark-page'; 
 import OfflinePage from '../pages/offline/offline-page';
+import NotFoundPage from '../pages/not-found/not-found-page';
 
 import { checkAuthenticatedRoute, checkUnauthenticatedRouteOnly } from '../utils/auth'; 
 export const routes = {
@@ -22,7 +22,6 @@ export const routes = {
   '/stories/:id': () => checkAuthenticatedRoute(new StoryDetailPage()), 
   
   '/bookmark': () => checkAuthenticatedRoute(new BookmarkPage()),
-  '/offline': () => new OfflinePage(), // Offline page can be accessed without auth
-  
-  
+  '/offline': () => new OfflinePage(),
+  '*': () => new NotFoundPage(), // Tambahkan ini untuk fallback Not Found
 };

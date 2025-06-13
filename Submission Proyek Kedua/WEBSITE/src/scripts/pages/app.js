@@ -179,8 +179,13 @@ export default class App {
           this.#setupNavigationList();
         }
       } else {
-        console.error(`App.renderPage: Handler untuk rute "${url}" tidak ditemukan di objek routes.`);
-        this.#content.innerHTML = '<h1>404 - Halaman Tidak Ditemukan</h1><p>Maaf, halaman yang Anda cari tidak ada.</p>';
+        // Tampilkan halaman Not Found jika rute tidak ditemukan
+        const NotFoundPage = (await import('../pages/not-found/not-found-page.js')).default;
+        const notFoundInstance = new NotFoundPage();
+        this.#content.innerHTML = await notFoundInstance.render();
+        if (typeof notFoundInstance.afterRender === 'function') {
+          await notFoundInstance.afterRender();
+        }
         this.#setupNavigationList();
       }
     } catch (error) {

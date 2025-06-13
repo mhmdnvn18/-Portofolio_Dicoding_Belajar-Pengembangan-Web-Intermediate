@@ -29,7 +29,7 @@ class OfflinePage {
           <div class="offline-content">
             <div class="offline-tabs">
               <button id="stories-tab" class="tab-button active" data-tab="stories">
-                <i class="fas fa-book"></i> Cerita Tersimpan
+                <i class="fas fa-book"></i> Laporan Tersimpan
               </button>
               <button id="favorites-tab" class="tab-button" data-tab="favorites">
                 <i class="fas fa-heart"></i> Favorit
@@ -39,8 +39,8 @@ class OfflinePage {
             <div class="tab-content">
               <div id="stories-content" class="tab-panel active">
                 <div class="tab-header">
-                  <h2><i class="fas fa-database"></i> Cerita dari IndexedDB</h2>
-                  <p>Data cerita yang tersimpan secara lokal di perangkat Anda.</p>
+                  <h2><i class="fas fa-database"></i> Laporan dari IndexedDB</h2>
+                  <p>Data laporan yang tersimpan secara lokal di perangkat Anda.</p>
                 </div>
                 <div id="offline-stories-list" class="offline-stories-container">
                   ${generateLoaderTemplate()}
@@ -49,8 +49,8 @@ class OfflinePage {
 
               <div id="favorites-content" class="tab-panel">
                 <div class="tab-header">
-                  <h2><i class="fas fa-heart"></i> Cerita Favorit</h2>
-                  <p>Cerita yang telah Anda simpan sebagai favorit.</p>
+                  <h2><i class="fas fa-heart"></i> Laporan Favorit</h2>
+                  <p>Laporan yang telah Anda simpan sebagai favorit.</p>
                 </div>
                 <div id="offline-favorites-list" class="offline-favorites-container">
                   ${generateLoaderTemplate()}
@@ -296,8 +296,8 @@ class OfflinePage {
       container.innerHTML = `
         <div class="offline-empty">
           <i class="fas fa-database"></i>
-          <h3>Tidak ada cerita tersimpan</h3>
-          <p>Cerita akan tersimpan secara otomatis ketika Anda mengaksesnya saat online.</p>
+          <h3>Tidak ada laporan tersimpan</h3>
+          <p>Laporan akan tersimpan secara otomatis ketika Anda mengaksesnya saat online.</p>
         </div>
       `;
       return;
@@ -331,8 +331,8 @@ class OfflinePage {
       container.innerHTML = `
         <div class="offline-empty">
           <i class="fas fa-heart"></i>
-          <h3>Tidak ada cerita favorit</h3>
-          <p>Simpan cerita sebagai favorit untuk mengaksesnya saat offline.</p>
+          <h3>Tidak ada laporan favorit</h3>
+          <p>Simpan laporan sebagai favorit untuk mengaksesnya saat offline.</p>
         </div>
       `;
       return;
@@ -366,7 +366,7 @@ class OfflinePage {
       <div class="offline-stats">
         <div class="stat-item">
           <div class="stat-number">${this.stories.length}</div>
-          <div class="stat-label">Cerita</div>
+          <div class="stat-label">Laporan</div>
         </div>
         <div class="stat-item">
           <div class="stat-number">${this.favorites.length}</div>
