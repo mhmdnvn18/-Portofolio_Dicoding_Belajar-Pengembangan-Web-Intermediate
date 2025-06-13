@@ -78,7 +78,7 @@ function showUpdateNotification() {
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background: #2c63d1;
+    background: #d32f2f;
     color: white;
     padding: 15px 20px;
     border-radius: 8px;
@@ -91,7 +91,7 @@ function showUpdateNotification() {
   
   notification.innerHTML = `
     <span>Versi aplikasi baru tersedia!</span>
-    <button id="update-app" style="background: white; color: #2c63d1; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+    <button id="update-app" style="background: white; color: #d32f2f; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
       Update
     </button>
     <button id="dismiss-update" style="background: transparent; color: white; border: 1px solid white; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
@@ -243,7 +243,7 @@ function showConnectionStatus(message, type) {
     position: fixed;
     top: 100px;
     right: 20px;
-    background: ${type === 'success' ? '#4caf50' : '#ff9800'};
+    background: ${type === 'success' ? '#d32f2f' : '#ff9800'};
     color: white;
     padding: 10px 15px;
     border-radius: 4px;

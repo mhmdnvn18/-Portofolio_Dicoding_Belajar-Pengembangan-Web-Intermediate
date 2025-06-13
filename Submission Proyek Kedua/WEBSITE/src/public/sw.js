@@ -50,6 +50,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Only handle http(s) requests
+  if (!event.request.url.startsWith('http')) {
+    return;
+  }
+
   // Handle API requests (network first, then cache)
   if (event.request.url.includes('story-api.dicoding.dev')) {
     event.respondWith(
@@ -176,6 +181,9 @@ self.addEventListener('push', (event) => {
         title: 'Tutup'
       }
     ]
+    // Tambahkan warna background merah jika didukung (tidak semua browser support)
+    // badge: '/favicon.png',
+    // backgroundColor: '#d32f2f'
   };
 
   event.waitUntil(
@@ -232,4 +240,4 @@ self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
-}); 
+});

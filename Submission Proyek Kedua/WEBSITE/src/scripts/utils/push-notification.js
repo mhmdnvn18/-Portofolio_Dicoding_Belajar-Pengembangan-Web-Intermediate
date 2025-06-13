@@ -270,7 +270,7 @@ class PushNotificationHelper {
       position: fixed;
       top: 20px;
       right: 20px;
-      background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'};
+      background: ${type === 'success' ? '#d32f2f' : type === 'error' ? '#b71c1c' : '#d32f2f'};
       color: white;
       padding: 15px 20px;
       border-radius: 4px;
@@ -311,4 +311,4 @@ class PushNotificationHelper {
 
 // Export singleton instance
 const pushNotificationHelper = new PushNotificationHelper();
-export default pushNotificationHelper; 
+export default pushNotificationHelper;

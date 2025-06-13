@@ -80,7 +80,7 @@ class OfflinePage {
         }
 
         .offline-header {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(135deg, #e53935 0%, #b71c1c 100%);
           color: white;
           padding: 3rem 0;
           text-align: center;
@@ -138,7 +138,7 @@ class OfflinePage {
         }
 
         .tab-button.active {
-          background: #2c63d1;
+          background: #d32f2f;
           color: white;
         }
 
@@ -163,7 +163,7 @@ class OfflinePage {
         }
 
         .tab-header h2 {
-          color: #2c63d1;
+          color: #d32f2f;
           margin-bottom: 0.5rem;
           display: flex;
           align-items: center;
@@ -230,7 +230,7 @@ class OfflinePage {
         .stat-number {
           font-size: 2rem;
           font-weight: bold;
-          color: #2c63d1;
+          color: #d32f2f;
         }
 
         .stat-label {
@@ -460,7 +460,7 @@ class OfflinePage {
       position: fixed;
       top: 20px;
       right: 20px;
-      background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'};
+      background: ${type === 'success' ? '#d32f2f' : type === 'error' ? '#b71c1c' : '#d32f2f'};
       color: white;
       padding: 15px 20px;
       border-radius: 4px;
@@ -483,4 +483,4 @@ class OfflinePage {
   }
 }
 
-export default OfflinePage; 
+export default OfflinePage;

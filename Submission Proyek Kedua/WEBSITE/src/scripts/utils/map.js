@@ -42,7 +42,18 @@ export default class Map {
   }
  
  
+  static #removeExistingMapInstance(selector) {
+    const container = document.querySelector(selector);
+    if (container && container._leaflet_id) {
+      container._leaflet_id = null;
+      container.innerHTML = '';
+    }
+  }
+
   static async build(selector, options = {}) {
+    // Remove existing map instance if present
+    Map.#removeExistingMapInstance(selector);
+
     if ('center' in options && options.center) {
       return new Map(selector, options);
     }
