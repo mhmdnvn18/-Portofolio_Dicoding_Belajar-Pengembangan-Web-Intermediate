@@ -1,6 +1,5 @@
-Nama: Aditya Navra Erlangga
-APP_URL=https://story-api.dicoding.dev/v1
-DEPLOY_URL= 
+APP_URL= https://story-api.dicoding.dev/v1
+DEPLOY_URL= https://dicoding-mhmdnvn18.netlify.app/
 PWA Features Implemented:
 ✅ Web App Manifest (Installable)
 ✅ Service Worker (Offline Support)
