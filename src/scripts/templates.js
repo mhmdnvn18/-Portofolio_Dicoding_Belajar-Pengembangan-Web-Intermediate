@@ -73,10 +73,10 @@ export function generateReportItemTemplate({
     return `${text.substring(0, maxLength)}...`;
   };
   const locationText = (typeof lat === 'number' && typeof lon === 'number') ? 'Lokasi disertakan' : '';
-  const placeholderImage = 'images/placeholder-image.jpg'; // Definisikan path placeholder
+  const placeholderImage = 'images/placeholder-image.jpg';
 
   return `
-    <div tabindex="0" class="story-item" data-storyid="${id}">
+    <article tabindex="0" class="story-item" data-storyid="${id}">
       <img 
         class="story-item__image" 
         src="${photoUrl || placeholderImage}" 
@@ -108,7 +108,7 @@ export function generateReportItemTemplate({
           Selengkapnya <i class="fas fa-arrow-right"></i>
         </a>
       </div>
-    </div>
+    </article>
   `;
 }
 

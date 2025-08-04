@@ -1,27 +1,12 @@
-import RegisterPage from '../pages/auth/register/register-page';
-import LoginPage from '../pages/auth/login/login-page';
-import HomePage from '../pages/home/home-page';         
-import NewPage from '../pages/new/new-page';             
+import { checkAuthenticatedRoute, checkUnauthenticatedRouteOnly } from '../utils/auth';
 
-import StoryDetailPage from '../pages/story-detail/story-detail-page'; 
-
-import BookmarkPage from '../pages/bookmark/bookmark-page'; 
-import OfflinePage from '../pages/offline/offline-page';
-import NotFoundPage from '../pages/not-found/not-found-page';
-
-import { checkAuthenticatedRoute, checkUnauthenticatedRouteOnly } from '../utils/auth'; 
 export const routes = {
-  
-  '/login': () => checkUnauthenticatedRouteOnly(new LoginPage()),
-  '/register': () => checkUnauthenticatedRouteOnly(new RegisterPage()),
-
-  '/': () => checkAuthenticatedRoute(new HomePage()),
-  '/new': () => checkAuthenticatedRoute(new NewPage()),
-  
-  
-  '/stories/:id': () => checkAuthenticatedRoute(new StoryDetailPage()), 
-  
-  '/bookmark': () => checkAuthenticatedRoute(new BookmarkPage()),
-  '/offline': () => new OfflinePage(),
-  '*': () => new NotFoundPage(), // Tambahkan ini untuk fallback Not Found
+  '/login': async () => checkUnauthenticatedRouteOnly(new (await import('../pages/auth/login/login-page.js')).default()),
+  '/register': async () => checkUnauthenticatedRouteOnly(new (await import('../pages/auth/register/register-page.js')).default()),
+  '/': async () => checkAuthenticatedRoute(new (await import('../pages/home/home-page.js')).default()),
+  '/new': async () => checkAuthenticatedRoute(new (await import('../pages/new/new-page.js')).default()),
+  '/stories/:id': async () => checkAuthenticatedRoute(new (await import('../pages/story-detail/story-detail-page.js')).default()),
+  '/bookmark': async () => checkAuthenticatedRoute(new (await import('../pages/bookmark/bookmark-page.js')).default()),
+  '/offline': async () => new (await import('../pages/offline/offline-page.js')).default(),
+  '*': async () => new (await import('../pages/not-found/not-found-page.js')).default(),
 };
