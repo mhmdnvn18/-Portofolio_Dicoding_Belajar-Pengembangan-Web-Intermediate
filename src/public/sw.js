@@ -1,13 +1,15 @@
-const CACHE_NAME = 'laporan-v1';
+// File: src/public/sw.js
+
+const CACHE_NAME = 'laporan-v2'; // Versi cache diperbarui
 const urlsToCache = [
   '/',
   '/app.bundle.js',
-  '/styles.css',
-  '/manifest.json',
-  '/favicon.png',
+  '/index.html', // Tambahkan index.html
+  // Pastikan path ke assets publik sudah benar
   '/images/logo.png',
   '/images/placeholder-image.jpg',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
+  '/favicon.png',
+  '/manifest.json',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'
 ];
 
@@ -17,11 +19,12 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('Service Worker: Caching files');
+        console.log('Service Worker: Caching app shell');
         return cache.addAll(urlsToCache);
       })
+      .then(() => self.skipWaiting()) // Aktifkan SW baru segera
       .catch((error) => {
-        console.log('Service Worker: Caching failed', error);
+        console.error('Service Worker: Caching failed', error);
       })
   );
 });
@@ -38,7 +41,7 @@ self.addEventListener('activate', (event) => {
             return caches.delete(cacheName);
           }
         })
-      );
+      ).then(() => self.clients.claim()); // Ambil kontrol halaman segera
     })
   );
 });
@@ -50,86 +53,76 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Only handle http(s) requests
+  // Hanya tangani http(s) requests
   if (!event.request.url.startsWith('http')) {
     return;
   }
 
-  // Handle API requests (network first, then cache)
+  // Strategi: Network First untuk API
   if (event.request.url.includes('story-api.dicoding.dev')) {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
-          // Clone the response before caching
+          // Clone respons untuk disimpan di cache
           const responseToCache = response.clone();
-          
-          // Cache the fresh response
-          caches.open(CACHE_NAME)
-            .then((cache) => {
-              cache.put(event.request, responseToCache);
-            })
-            .catch((err) => console.error('Failed to cache API response:', err));
-          
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
           return response;
         })
         .catch(async () => {
-          // If offline, try to serve from cache
+          // Jika gagal, coba ambil dari cache
           const cachedResponse = await caches.match(event.request);
           if (cachedResponse) {
             return cachedResponse;
           }
-          // If no cached data, throw network error
-          throw new Error('No cached data available');
+          // Jika tidak ada di cache, kembalikan error
+          return new Response(JSON.stringify({ message: 'Offline dan tidak ada data di cache.' }), {
+            status: 503,
+            statusText: 'Service Unavailable',
+            headers: new Headers({ 'Content-Type': 'application/json' })
+          });
         })
     );
     return;
   }
-
-  // For non-API requests (cache first, then network)
+  
+  // Strategi: Cache First untuk asset lainnya
   event.respondWith(
     caches.match(event.request)
-      .then((response) => {
-        // Return cached version if available
-        if (response) {
-          // Fetch new version in background
-          fetch(event.request)
-            .then((fetchResponse) => {
-              caches.open(CACHE_NAME)
-                .then((cache) => {
-                  cache.put(event.request, fetchResponse);
-                })
-                .catch((err) => console.error('Failed to update cache:', err));
-            })
-            .catch(() => {/* Ignore fetch errors */});
-          
-          return response;
+      .then((cachedResponse) => {
+        // Jika ada di cache, kembalikan
+        if (cachedResponse) {
+          return cachedResponse;
         }
 
-        // If not in cache, fetch from network
-        return fetch(event.request)
-          .then((fetchResponse) => {
-            // Cache the fetched response
-            const responseToCache = fetchResponse.clone();
-            caches.open(CACHE_NAME)
-              .then((cache) => {
-                cache.put(event.request, responseToCache);
-              })
-              .catch((err) => console.error('Failed to cache response:', err));
-            
-            return fetchResponse;
+        // Jika tidak, ambil dari network
+        return fetch(event.request).then((networkResponse) => {
+          // Simpan respons network ke cache
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
           });
+          return networkResponse;
+        });
       })
       .catch(() => {
-        // Offline fallback
+        // Fallback jika network dan cache gagal
         if (event.request.destination === 'image') {
           return caches.match('/images/placeholder-image.jpg');
         }
-        if (event.request.destination === 'document') {
-          return caches.match('/');
+        // Fallback untuk navigasi ke halaman utama
+        if (event.request.mode === 'navigate') {
+          return caches.match('/index.html');
         }
+        return new Response("Konten tidak tersedia secara offline.", {
+          status: 404,
+          statusText: "Not Found"
+        });
       })
   );
 });
+
 
 // Push notification event
 self.addEventListener('push', (event) => {
@@ -181,9 +174,6 @@ self.addEventListener('push', (event) => {
         title: 'Tutup'
       }
     ]
-    // Tambahkan warna background merah jika didukung (tidak semua browser support)
-    // badge: '/favicon.png',
-    // backgroundColor: '#d32f2f'
   };
 
   event.waitUntil(
@@ -221,22 +211,8 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
-// Background sync for offline actions
-self.addEventListener('sync', (event) => {
-  console.log('Service Worker: Background sync', event.tag);
-  
-  if (event.tag === 'background-sync') {
-    event.waitUntil(
-      // Handle background sync logic here
-      console.log('Service Worker: Performing background sync')
-    );
-  }
-});
-
 // Message event for communication with main thread
 self.addEventListener('message', (event) => {
-  console.log('Service Worker: Message received', event.data);
-  
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }

@@ -96,12 +96,9 @@ export async function getStoryById(id) {
 }
 
 /**
- * 
- * @param {FormData} formData 
- * @returns {Promise<object>} 
- *
- * 
- * 
+ * Mengirim cerita baru ke API menggunakan Fetch API dengan FormData.
+ * @param {FormData} formData - Objek FormData yang berisi data cerita (description, photo, lat, lon).
+ * @returns {Promise<object>} - Respons dari API.
  */
 export async function addNewStory(formData) { 
   const accessToken = getAccessToken();
@@ -109,58 +106,32 @@ export async function addNewStory(formData) {
     return { error: true, message: 'Access token not found', ok: false, status: 401 };
   }
 
-  console.log('--- MENGIRIM FormData KE addNewStory (versi XHR) ---');
-  for (let pair of formData.entries()) {
-    console.log(`FormData Entry: ${pair[0]} =`, pair[1]);
-    if (pair[1] instanceof File || pair[1] instanceof Blob) {
-      console.log(`  (Detail File/Blob: name=${pair[1].name}, size=${pair[1].size}, type=${pair[1].type})`);
-    }
+  try {
+    const fetchResponse = await fetch(ENDPOINTS.STORIES, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: formData,
+    });
+
+    const json = await fetchResponse.json();
+
+    return {
+      ...json,
+      ok: fetchResponse.ok,
+      status: fetchResponse.status,
+    };
+  } catch (error) {
+    console.error('addNewStory fetch error:', error);
+    return {
+      error: true,
+      message: 'Gagal terhubung ke server. Periksa koneksi internet Anda.',
+      ok: false,
+      status: 0,
+    };
   }
-  console.log('-------------------------------------------------');
-
-  return new Promise((resolve) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', ENDPOINTS.STORIES, true);
-    xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
-
-
-    xhr.onload = function () {
-      let jsonResponse = {};
-      try {
-        jsonResponse = JSON.parse(xhr.responseText);
-      } catch (e) {
-        console.error("Gagal parse JSON dari respons XHR:", xhr.responseText, e);
-        
-        resolve({
-          error: true,
-          message: `Error: Respons server tidak valid atau bukan JSON. Status: ${xhr.status}`,
-          ok: false,
-          status: xhr.status
-        });
-        return;
-      }
-
-      if (xhr.status >= 200 && xhr.status < 300) { 
-        resolve({ ...jsonResponse, ok: true, status: xhr.status });
-      } else { 
-        resolve({ ...jsonResponse, ok: false, status: xhr.status });
-      }
-    };
-
-    xhr.onerror = function () {
-      console.error('XHR onerror triggered:', xhr.statusText);
-      resolve({
-        error: true,
-        message: 'Error jaringan atau permintaan XHR gagal total.',
-        ok: false,
-        status: xhr.status 
-      });
-    };
-
-    xhr.send(formData);
-  });
 }
-
 
 export async function addNewStoryGuest(formData) { 
   console.log('--- MENGIRIM FormData KE addNewStoryGuest ---');

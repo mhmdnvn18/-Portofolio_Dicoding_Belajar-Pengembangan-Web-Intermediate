@@ -1,3 +1,5 @@
+// File: src/scripts/pages/app.js
+
 import { getActiveRoute } from '../routes/url-parser'; 
 import {
   generateAuthenticatedNavigationListTemplate,
@@ -5,7 +7,7 @@ import {
   generateUnauthenticatedNavigationListTemplate,
 } from '../templates'; 
 
-import { setupSkipToContent } from '../utils'; 
+import { setupSkipToContent, transitionHelper } from '../utils'; 
 import { getAccessToken, getLogout } from '../utils/auth'; 
 import { routes } from '../routes/routes'; 
 
@@ -118,74 +120,33 @@ export default class App {
     const url = getActiveRoute();
     const routeHandlerFunction = url ? routes[url] : undefined;
 
-    console.log(`App.renderPage: Attempting to render URL: "${url}"`); // Log dasar untuk URL
-
     if (!this.#content) {
       console.error('App.renderPage: Target #content element is not defined.');
       return; 
     }
 
     try {
-      if (typeof routeHandlerFunction === 'function') {
-        const pageInstance = await routeHandlerFunction();
+      const pageInstance = routeHandlerFunction ? await routeHandlerFunction() : new ((await import('../pages/not-found/not-found-page.js')).default)();
 
-        if (pageInstance && typeof pageInstance.render === 'function') {
-          if (document.startViewTransition) {
-            const transition = document.startViewTransition(async () => {
-              this.#content.innerHTML = await pageInstance.render();
-              if (typeof pageInstance.afterRender === 'function') {
-                await pageInstance.afterRender();
-              } else {
-                 console.warn(`Metode afterRender tidak ditemukan pada halaman untuk URL: ${url}`);
-              }
-            });
-
-            try {
-              await transition.ready; 
-              await transition.updateCallbackDone; 
-              console.log('View Transition (versi sederhana) selesai dengan sukses.');
-            } catch (error) {
-              if (error.name === 'InvalidStateError') {
-                console.error('View Transition (versi sederhana) dibatalkan karena InvalidStateError:', error);
-                // Fallback: render tanpa transisi jika state tidak valid
-                this.#content.innerHTML = await pageInstance.render();
-                if (typeof pageInstance.afterRender === 'function') {
-                  await pageInstance.afterRender();
-                }
-              } else {
-                console.error('View Transition (versi sederhana) error lain:', error);
-                this.#content.innerHTML = await pageInstance.render();
-                if (typeof pageInstance.afterRender === 'function') {
-                  await pageInstance.afterRender();
-                }
-              }
-            }
-          } else {
-            console.log('View Transitions API tidak didukung, merender tanpa animasi.');
-            this.#content.innerHTML = await pageInstance.render();
-            if (typeof pageInstance.afterRender === 'function') {
-              await pageInstance.afterRender();
-            }
+      if (pageInstance && typeof pageInstance.render === 'function') {
+        const updateDOM = async () => {
+          this.#content.innerHTML = await pageInstance.render();
+          if (typeof pageInstance.afterRender === 'function') {
+            await pageInstance.afterRender();
           }
-          
-          scrollTo({ top: 0, behavior: 'smooth' });
-          this.#setupNavigationList();
+        };
 
-        } else if (pageInstance === null) {
-          console.log(`App.renderPage: Page instance is null for URL "${url}", likely redirected by auth guard.`);
-        } else {
-          console.error(`App.renderPage: Handler untuk rute "${url}" ada tapi tidak mengembalikan instance halaman yang valid:`, pageInstance);
-          this.#content.innerHTML = '<h1>Error: Konfigurasi Halaman Salah</h1>';
-          this.#setupNavigationList();
-        }
+        await transitionHelper({ updateDOM });
+        
+        scrollTo({ top: 0, behavior: 'smooth' });
+        this.#setupNavigationList();
+
+      } else if (pageInstance === null) {
+        // Redirected by auth guard, do nothing as location.hash is already changed.
+        console.log(`App.renderPage: Page instance is null for URL "${url}", likely redirected.`);
       } else {
-        // Tampilkan halaman Not Found jika rute tidak ditemukan
-        const NotFoundPage = (await import('../pages/not-found/not-found-page.js')).default;
-        const notFoundInstance = new NotFoundPage();
-        this.#content.innerHTML = await notFoundInstance.render();
-        if (typeof notFoundInstance.afterRender === 'function') {
-          await notFoundInstance.afterRender();
-        }
+        console.error(`App.renderPage: Handler untuk rute "${url}" tidak valid.`);
+        this.#content.innerHTML = '<h1>Error: Konfigurasi Halaman Salah</h1>';
         this.#setupNavigationList();
       }
     } catch (error) {
