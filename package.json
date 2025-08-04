@@ -6,6 +6,7 @@
     "clean": "if exist dist rmdir /s /q dist",
     "build": "webpack --config ./webpack.prod.js",
     "build:dev": "webpack --config ./webpack.dev.js",
+    "dev": "npm run clean && npm run build:dev && webpack serve --config ./webpack.dev.js",
     "start-dev": "npm run clean && npm run build:dev && webpack serve --config ./webpack.dev.js",
     "serve": "http-server ./dist --port 3000",
     "prettier:write": "prettier . --write"
