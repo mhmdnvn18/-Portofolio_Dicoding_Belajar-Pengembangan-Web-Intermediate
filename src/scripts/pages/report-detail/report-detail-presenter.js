@@ -35,8 +35,6 @@ export default class ReportDetailPresenter {
        const report = await reportMapper(response.data);
       console.log(report); // for debugging purpose, remove after checking it
       this.#view.populateReportDetailAndInitialMap(response.message, report);
-
-      this.#view.populateReportDetailAndInitialMap(response.message, response.data);
     } catch (error) {
       console.error('showReportDetailAndMap: error:', error);
       this.#view.populateReportDetailError(error.message);
@@ -88,6 +86,7 @@ export default class ReportDetailPresenter {
   }
 
   #isReportSaved() {
+    // Implementasi logika pengecekan status favorit
     return false;
   }
 }

@@ -79,7 +79,7 @@ export default class RegisterPage {
 
   registeredFailed(message) {
     if (this.#errorContainer) {
-      this.#errorContainer.textContent = message || 'Terjadi kesalahan saat registrasi.';
+      this.#errorContainer.textContent = message || 'Terjadi kesalahan saat registrasi. Silakan coba lagi.';
     }
   }
   

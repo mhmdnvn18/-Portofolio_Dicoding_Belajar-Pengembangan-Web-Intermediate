@@ -66,8 +66,6 @@ export default class ReportDetailPage {
       <section class="container">
         <hr>
         <div class="report-detail__comments__container">
-          ${this.#renderCommentForm()}
-          <hr>
           ${this.#renderCommentsList()}
         </div>
       </section>
@@ -107,7 +105,9 @@ export default class ReportDetailPage {
 
   #setupForm() {
     this.#state.form = document.getElementById('comments-list-form');
-    this.#state.form.addEventListener('submit', this.#handleFormSubmit.bind(this));
+    if (this.#state.form) {
+      this.#state.form.addEventListener('submit', this.#handleFormSubmit.bind(this));
+    }
   }
 
   async #handleFormSubmit(event) {
@@ -121,7 +121,7 @@ export default class ReportDetailPage {
   async #loadInitialData() {
     await Promise.all([
       this.#state.presenter.showReportDetail(),
-      this.#state.presenter.getCommentsList()
+      // this.#state.presenter.getCommentsList() // API not available
     ]);
   }
 
