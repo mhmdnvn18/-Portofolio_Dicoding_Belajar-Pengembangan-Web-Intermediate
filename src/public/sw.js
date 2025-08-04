@@ -58,31 +58,17 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Strategi: Network First untuk API
+  // Strategi: Stale While Revalidate untuk API
   if (event.request.url.includes('story-api.dicoding.dev')) {
     event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          // Clone respons untuk disimpan di cache
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-          return response;
-        })
-        .catch(async () => {
-          // Jika gagal, coba ambil dari cache
-          const cachedResponse = await caches.match(event.request);
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          // Jika tidak ada di cache, kembalikan error
-          return new Response(JSON.stringify({ message: 'Offline dan tidak ada data di cache.' }), {
-            status: 503,
-            statusText: 'Service Unavailable',
-            headers: new Headers({ 'Content-Type': 'application/json' })
-          });
-        })
+      caches.open(CACHE_NAME).then(async (cache) => {
+        const cachedResponse = await cache.match(event.request);
+        const fetchedResponsePromise = fetch(event.request).then((networkResponse) => {
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
+        });
+        return cachedResponse || fetchedResponsePromise;
+      })
     );
     return;
   }

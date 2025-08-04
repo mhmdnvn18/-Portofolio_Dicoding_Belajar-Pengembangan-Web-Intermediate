@@ -27,10 +27,18 @@ export default class ReportDetailPage {
 
   constructor() {
     this.#initializeComponents();
+    this.#initializePresenter();
   }
 
   #initializeComponents() {
     this.#bindMethods();
+  }
+
+  #initializePresenter() {
+    this.#state.presenter = new ReportDetailPresenter(parseActivePathname().id, {
+      view: this,
+      apiModel: RuangKisahAPI,
+    });
   }
 
   #bindMethods() {
@@ -93,16 +101,8 @@ export default class ReportDetailPage {
   }
 
   async afterRender() {
-    this.#initializePresenter();
     this.#setupForm();
     await this.#loadInitialData();
-  }
-
-  #initializePresenter() {
-    this.#state.presenter = new ReportDetailPresenter(parseActivePathname().id, {
-      view: this,
-      apiModel: RuangKisahAPI,
-    });
   }
 
   #setupForm() {
@@ -140,13 +140,13 @@ export default class ReportDetailPage {
     createCarousel(document.getElementById('images'));
 
     await this.#state.presenter.showReportDetailMap();
-  if (this.#state.map) {
-    const reportCoordinate = [report.location.latitude, report.location.longitude];
-    const markerOptions = { alt: report.title };
-    const popupOptions = { content: report.title };
-    this.#state.map.changeCamera(reportCoordinate);
-    this.#state.map.addMarker(reportCoordinate, markerOptions, popupOptions);
-  }
+    if (this.#state.map) {
+      const reportCoordinate = [report.location.latitude, report.location.longitude];
+      const markerOptions = { alt: report.title };
+      const popupOptions = { content: report.title };
+      this.#state.map.changeCamera(reportCoordinate);
+      this.#state.map.addMarker(reportCoordinate, markerOptions, popupOptions);
+    }
 
     this.#state.presenter.showSaveButton();
     this.addNotifyMeEventListener();
@@ -213,15 +213,11 @@ export default class ReportDetailPage {
   renderSaveButton() {
     document.getElementById('save-actions-container').innerHTML =
       generateSaveReportButtonTemplate();
-
-    
   }
 
   renderRemoveButton() {
     document.getElementById('save-actions-container').innerHTML =
       generateRemoveReportButtonTemplate();
-
-    
   }
 
   addNotifyMeEventListener() {
@@ -270,10 +266,3 @@ export default class ReportDetailPage {
     `;
   }
 }
-
-const presenter = new HomePresenter({
-  view: homePage,
-  model: StoryAPI
-});
-
-await presenter.initialGalleryAndMap();
